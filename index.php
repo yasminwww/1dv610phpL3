@@ -1,7 +1,7 @@
 <?php
 
 //INCLUDE THE FILES NEEDED...
-require_once('MainController.php');
+require_once('controller/MainController.php');
 require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');

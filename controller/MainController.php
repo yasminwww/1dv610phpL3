@@ -8,34 +8,31 @@ class MainController
     private $loginView;
     private $timeView;
 
-    // private $registerView;
+    private $registerView;
 
 
     private $database;
 
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->layoutView = new LayoutView();
         $this->loginView = new LoginView();
         $this->timeView = new DateTimeView();
-
-        // $this->registerView = new RegisterView();
+        $this->registerView = new RegisterView();
 
     }
 
-    public function run()
-    {
-        // if($this->loginView->isNavigatingToRegistration()) {
-        if ($this->loginView->isTryingToSignup()) {
-            $credentials = $this->loginView->getCredentialsInRegisterForm();
+    public function run() {
+
+        if ($this->registerView->isTryingToSignup()) {
+            $credentials = $this->registerView->getCredentialsInRegisterForm();
                 // debug_print_backtrace();
             if ($credentials->username >= 3 && $credentials->password >= 6) {
                 $_SESSION['username'] = $credentials->username;
                 $_SESSION['password'] = $credentials->password;
                     //echo $_SESSION['username'];
             }
-        // }
+
 
 
 
@@ -69,13 +66,11 @@ class MainController
         $this->renderHTML();
     }
 
-    private function renderHTML()
-    {
+    private function renderHTML() {
         $this->layoutView->render($this->loginView->isAuthorised(), $this->loginView, $this->timeView);
     }
 
-    public function killSession()
-    {
+    public function killSession() {
         session_destroy();
     }
 

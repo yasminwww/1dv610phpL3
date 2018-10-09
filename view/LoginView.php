@@ -33,29 +33,27 @@ class LoginView
 
 	public function __construct()
 	{
-
+		$this->registerView = new RegisterView();
 		$this->correctCredentials = new Credentials('Admin', 'Password');
 
 	}
 
-	public function response()
-	{
-		
+	public function response() {
 		//START:
 
 		if ($this->isLoggingOut()) {
 			return $this->generateLoginFormHTML('Bye bye!');
 		}
-		if ($this->isTryingToSignup()) {
-			if ($this->validationMessageRegister() == 'Registered new user.') {
-				return $this->generateLoginFormHTML($this->validationMessageRegister());
+		if ($this->registerView->isTryingToSignup()) {
+			if ($this->registerView->validationMessageRegister() == 'Registered new user.') {
+				return $this->generateLoginFormHTML($this->registerView->validationMessageRegister());
 			} else {
-				return $this->generateRegisterFormHTML($this->validationMessageRegister());
+				return $this->registerView->generateRegisterFormHTML($this->registerView->validationMessageRegister());
 			}
 		}
 
 		if ($this->isNavigatingToRegistration()) {
-			return $this->generateRegisterFormHTML('');
+			return $this->registerView->generateRegisterFormHTML('');
 		}
 		if ($this->isTryingToLogin()) {
 			if ($this->isAuthorised() && !isset($_SESSION['already-loggedin'])) {
@@ -121,26 +119,15 @@ class LoginView
 	}
 
 
-	public function isNavigatingToLogin() : bool
-	{
-		return isset($_GET[self::$loginForm]);
-	}
-
-
-	public function isTryingToSignup() : bool
-	{
-		return isset($_POST[self::$submitSignup]);
-	}
-
 	public function isTryingToLogin() : bool
 	{
 		return isset($_POST[self::$login]);
 	}
+
 	public function keepMeLoggedIn() : bool
 	{
 		return isset($_POST[self::$keep]);
 	}
-
 
 	public function isLoggingOut() : bool
 	{

@@ -3,14 +3,20 @@
 class RegisterView {
 
 
-        private static $registerName = 'RegisterView::UserName';
-        private static $registerPassword = 'RegisterView::Password';
+    private static $registerName = 'RegisterView::UserName';
+    private static $registerPassword = 'RegisterView::Password';
+
+    private static $submitSignup = 'RegisterView::Register';
+    private static $passwordRepeat = 'RegisterView::PasswordRepeat';
+    private static $loginForm = 'login';
+    private static $registerMessageId = 'RegisterView::Message';
     
-        private static $submitSignup = 'RegisterView::Register';
-        private static $passwordRepeat = 'RegisterView::PasswordRepeat';
-        private static $loginForm = 'login';
-        private static $registerMessageId = 'RegisterView::Message';
-    
+
+	public function __construct()
+	{
+		$this->correctCredentials = new Credentials('Admin', 'Password');
+	}
+
         public function generateRegisterFormHTML($message)
         {
     
@@ -31,68 +37,79 @@ class RegisterView {
                         </fieldset>
                     </form>';
         }
-    
-    
-        public function getRequestUserNameFromRegistration()
-        {
-            if (isset($_POST[self::$registerName])) {
-                return $_POST[self::$registerName];
-            }
+
+    public function isNavigatingToLogin() : bool
+    {
+        return isset($_GET[self::$loginForm]);
+    }
+
+
+    public function isTryingToSignup() : bool
+    {
+		return isset($_POST[self::$submitSignup]);
+	}
+
+
+    public function getRequestUserNameFromRegistration()
+    {
+        if (isset($_POST[self::$registerName])) {
+            return $_POST[self::$registerName];
         }
-    
-        public function getRequestPasswordFromRegistration()
-        {
-            if (isset($_POST[self::$registerPassword])) {
-                return $_POST[self::$registerPassword];
-            }
+    }
+
+    public function getRequestPasswordFromRegistration()
+    {
+        if (isset($_POST[self::$registerPassword])) {
+            return $_POST[self::$registerPassword];
         }
+    }
+
+
+    public function isUsernameTooShort() : bool
+    {
+        return strlen($this->getRequestUserNameFromRegistration()) < 3;
+    }
+
+    public function isPasswordTooShort() : bool
+    {
+        return strlen($this->getRequestPasswordFromRegistration()) < 6;
+    }
     
     
-        public function isUsernameTooShort() : bool
-        {
-            return strlen($this->getRequestUserNameFromRegistration()) < 3;
+    public function validationMessageRegister() : string
+    {
+        if (!ctype_alnum($this->getRequestUserNameFromRegistration()) && !empty($this->getRequestUserNameFromRegistration())) {
+            return 'Username contains invalid characters.';
         }
-    
-        public function isPasswordTooShort() : bool
-        {
-            return strlen($this->getRequestPasswordFromRegistration()) < 6;
+
+        if ($this->isUsernameTooShort() && $this->isPasswordTooShort()) {
+            return 'Username has too few characters, at least 3 characters. Password has too few characters, at least 6 characters.';
         }
-    
-    
-        public function validationMessageRegister() : string
-        {
-            if (!ctype_alnum($this->getRequestUserNameFromRegistration()) && !empty($this->getRequestUserNameFromRegistration())) {
-                return 'Username contains invalid characters.';
-            }
-    
-            if ($this->isUsernameTooShort() && $this->isPasswordTooShort()) {
-                return 'Username has too few characters, at least 3 characters. Password has too few characters, at least 6 characters.';
-            }
-    
-            if ($this->isUsernameTooShort()) {
-                return 'Username has too few characters, at least 3 characters.';
-            }
-    
-            if ($this->isPasswordTooShort()) {
-                return ' Password has too few characters, at least 6 characters.';
-            } else if ($this->getRequestPasswordFromRegistration() != $_POST[self::$passwordRepeat]) {
-    
-                return 'Passwords do not match.';
-    
-            } else if ($this->getRequestUserNameFromRegistration() == $this->correctCredentials->username) {
-    
-                return 'User exists, pick another username.';
-    
-            } else {
-    
-                return 'Registered new user.';
-            }
+
+        if ($this->isUsernameTooShort()) {
+            return 'Username has too few characters, at least 3 characters.';
         }
-    
-    
-        public function getCredentialsInRegisterForm()
-        {
-            return new Credentials($this->getRequestUserNameFromRegistration(), $this->getRequestPasswordFromRegistration());
+
+        if ($this->isPasswordTooShort()) {
+            return ' Password has too few characters, at least 6 characters.';
+        } else if ($this->getRequestPasswordFromRegistration() != $_POST[self::$passwordRepeat]) {
+
+            return 'Passwords do not match.';
+
+        } else if ($this->getRequestUserNameFromRegistration() == $this->correctCredentials->username) {
+
+            return 'User exists, pick another username.';
+
+        } else {
+
+            return 'Registered new user.';
         }
+    }
+
+
+    public function getCredentialsInRegisterForm()
+    {
+        return new Credentials($this->getRequestUserNameFromRegistration(), $this->getRequestPasswordFromRegistration());
+    }
     
     }

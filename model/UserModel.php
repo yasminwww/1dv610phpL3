@@ -2,31 +2,26 @@
 // require_once('init.php');
 
 
-class User{
+class User
+{
     
     // Undgå error vid start.
-    private $username = null;
-	private $password = null;
-	// private $database;
+	private $username;
+	private $password;
 
-	public function __construct($username, $password) {
+	public function __construct()
+	{
 		$this->username = $username;
 		$this->password = $password;
 	}
 
-    public function getUsername() {
-        return $this->username;
-}
-	// public function checkForDublicatedUsernames() {
-	// }
-
-	public function saveUser($database) {
-
-			$query = "INSERT INTO users(username, password) VALUES ('$this->username', '$this->password')";
-			echo $query;
-			// var_dump($database);
-			$result = $database->query($query);
+	public function getUsername()
+	{
+		return $this->username;
+	}
+	public function getPassword()
+	{
+		return $this->password;
 
 	}
-
 }

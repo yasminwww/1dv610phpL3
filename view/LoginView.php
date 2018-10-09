@@ -39,15 +39,18 @@ class LoginView
 	}
 
 	public function response() {
-		//START:
 
 		if ($this->isLoggingOut()) {
 			return $this->generateLoginFormHTML('Bye bye!');
 		}
 		if ($this->registerView->isTryingToSignup()) {
+			
 			if ($this->registerView->validationMessageRegister() == 'Registered new user.') {
+
 				return $this->generateLoginFormHTML($this->registerView->validationMessageRegister());
+
 			} else {
+
 				return $this->registerView->generateRegisterFormHTML($this->registerView->validationMessageRegister());
 			}
 		}
@@ -56,11 +59,16 @@ class LoginView
 			return $this->registerView->generateRegisterFormHTML('');
 		}
 		if ($this->isTryingToLogin()) {
+
 			if ($this->isAuthorised() && !isset($_SESSION['already-loggedin'])) {
+
 				$_SESSION['already-loggedin'] = true;
 				return $this->generateLogoutButtonHTML('Welcome');
+
 			} else if ($this->isAuthorised() && isset($_SESSION['already-loggedin'])) {
+
 				return $this->generateLogoutButtonHTML('');
+
 			} else {
 				return $this->generateLoginFormHTML($this->validationMessageLogin());
 			}
@@ -148,11 +156,6 @@ class LoginView
 		}
 	}
 
-	public function errorMessage($validationMessage)
-	{
-		$this->message = $validationMessage;
-	}
-
 
 	public function isAuthorised() : bool
 	{
@@ -182,11 +185,6 @@ class LoginView
 
 			return '';
 		}
-	}
-
-	public function killSession()
-	{
-		return session_destroy();
 	}
 
 	public function getCredentialsInForm()

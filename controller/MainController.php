@@ -10,8 +10,11 @@ class MainController
 
     private $registerView;
 
+    private $registerController;
+    private $loginController;
 
-    private $database;
+
+
 
 
     public function __construct() {
@@ -20,42 +23,39 @@ class MainController
         $this->timeView = new DateTimeView();
         $this->registerView = new RegisterView();
 
+        $this->registerController = new RegisterController();
+        $this->loginController = new LoginController();
+
     }
 
     public function run() {
 
         if ($this->registerView->isTryingToSignup()) {
-            $credentials = $this->registerView->getCredentialsInRegisterForm();
-                // debug_print_backtrace();
-            if ($credentials->username >= 3 && $credentials->password >= 6) {
-                $_SESSION['username'] = $credentials->username;
-                $_SESSION['password'] = $credentials->password;
-                    //echo $_SESSION['username'];
-            }
 
-
+          $this->registerController->registerUser();
 
 
         } else if ($this->loginView->isTryingToLogin()) {
+            // skicka till login controller
+            $this->loginController->Login();
+            // $credentials = $this->loginView->getCredentialsInForm();
 
-            $credentials = $this->loginView->getCredentialsInForm();
+            // if ($credentials->username == $this->loginView->correctCredentials->username &&
+            //     $credentials->password == $this->loginView->correctCredentials->password) {
+            //     $_SESSION['username'] = $credentials->username;
+            //     $_SESSION['password'] = $credentials->password;
 
-            if ($credentials->username == $this->loginView->correctCredentials->username &&
-                $credentials->password == $this->loginView->correctCredentials->password) {
-                $_SESSION['username'] = $credentials->username;
-                $_SESSION['password'] = $credentials->password;
+            //     if($this->loginView->keepMeLoggedIn()) {
+            //             // echo "hejj";
+            //         $this->setCookieLife();
 
-                if($this->loginView->keepMeLoggedIn()) {
-                        // echo "hejj";
-                    $this->setCookieLife();
-
-                    echo $_COOKIE[$cookie];
-                }
+            //         echo $_COOKIE[$cookie];
+            //     }
                 // $_SESSION['message'] = 'Welcome';
                 // echo $_SESSION['username'];
 
             // }
-            }
+            // }
         } else if ($this->loginView->isLoggingOut()) {
             $this->killSession();
             $this->layoutView->render(false, $this->loginView, $this->timeView);

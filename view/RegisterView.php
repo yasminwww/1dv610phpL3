@@ -57,10 +57,12 @@ class RegisterView {
         }
     }
 
-    public function getRequestPasswordFromRegistration()
+    public function getRequestPasswordFromRegistration() : string
     {
         if (isset($_POST[self::$registerPassword])) {
             return $_POST[self::$registerPassword];
+        } else {
+            return '';
         }
     }
 
@@ -93,6 +95,8 @@ class RegisterView {
         if ($this->isPasswordTooShort()) {
             return ' Password has too few characters, at least 6 characters.';
         } else if ($this->getRequestPasswordFromRegistration() != $_POST[self::$passwordRepeat]) {
+            echo gettype($_POST[self::$registerPassword]);
+            echo gettype($_POST[self::$passwordRepeat]);
 
             return 'Passwords do not match.';
 

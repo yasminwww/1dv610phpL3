@@ -31,8 +31,8 @@ class Database {
         return $result;
     }
 
-    // public function checkForDublicatedUsernames() {
-    // }    
+    // public function checkForExistingUser() {
+    // } 
     
     // public function updateUsername() {
     // }

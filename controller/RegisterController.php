@@ -16,6 +16,10 @@ class RegisterController
         $credentials = $this->registerView->getCredentialsInRegisterForm();
         // debug_print_backtrace();
         if ($credentials->username >= 3 && $credentials->password >= 6) {
+            
+            // Save user to database.
+            
+
             $_SESSION['username'] = $credentials->username;
             $_SESSION['password'] = $credentials->password;
 

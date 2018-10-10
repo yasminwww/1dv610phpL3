@@ -4,8 +4,7 @@
 ### GIS ###
 *.gpx
 *.kml
-database/init.php
-database/new_config.php
+
 TODO.txt
 
 # End of https://www.gitignore.io/api/gis

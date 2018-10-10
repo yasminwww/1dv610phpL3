@@ -9,7 +9,7 @@ require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 require_once('view/RegisterView.php');
-// require_once('database.php');
+require_once('database/Database.php');
 require_once('model/UserModel.php');
 
 
@@ -20,4 +20,4 @@ ini_set('display_errors', 'On');
 session_start();
 
 $controller = new MainController();
-$controller->run(); //renderHTML();
+$controller->runLoginOrRegister(); //renderHTML();

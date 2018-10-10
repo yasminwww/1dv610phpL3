@@ -12,53 +12,66 @@ class RegisterView {
     private static $registerMessageId = 'RegisterView::Message';
     
 
-	public function __construct()
-	{
+	public function __construct() {
 		$this->correctCredentials = new Credentials('Admin', 'Password');
-	}
-
-        public function generateRegisterFormHTML($message)
-        {
+    }
     
-            return '
-            <a href="?' . self::$loginForm . '">Back to login</a>
-                    <form method="POST">
-                        <fieldset>
-                            <legend>Sign Up - enter Username and password</legend>
-                            <p id="' . self::$registerMessageId . '">' . $message . '</p>
-                            
-                            <label for="' . self::$registerName . '">Username :</label>
-                            <input type="text" id="' . self::$registerName . '" name="' . self::$registerName . '" value="' . strip_tags($this->getRequestUserNameFromRegistration()) . '" />
-                            <label for="' . self::$registerPassword . '">Password :</label>
-                            <input type="password" id="' . self::$registerPassword . '" name="' . self::$registerPassword . '" />
-                            <label for="' . self::$passwordRepeat . '">Repeat Password :</label>
-                            <input type="password" id="' . self::$passwordRepeat . '" name="' . self::$passwordRepeat . '" />
-                            <input type="submit" name="' . self::$submitSignup . '" value="SignUp" />
-                        </fieldset>
-                    </form>';
-        }
 
-    public function isNavigatingToLogin() : bool
-    {
+    // public function response() {
+
+	// 	if ($this->registerView->isTryingToSignup()) {
+			
+	// 		if ($this->registerView->isUserValid() == true) {
+
+	// 			return $this->generateLoginFormHTML($this->registerView->validationMessageRegister());
+
+	// 		} else {
+
+	// 			return $this->registerView->generateRegisterFormHTML($this->registerView->validationMessageRegister());
+	// 		}
+	// 	}
+    // }
+
+    public function generateRegisterFormHTML($message) {
+
+        return '
+        <a href="?' . self::$loginForm . '">Back to login</a>
+                <form method="POST">
+                    <fieldset>
+                        <legend>Sign Up - enter Username and password</legend>
+                        <p id="' . self::$registerMessageId . '">' . $message . '</p>
+                        
+                        <label for="' . self::$registerName . '">Username :</label>
+                        <input type="text" id="' . self::$registerName . '" name="' . self::$registerName . '" value="' . strip_tags($this->getRequestUserNameFromRegistration()) . '" />
+                        <label for="' . self::$registerPassword . '">Password :</label>
+                        <input type="password" id="' . self::$registerPassword . '" name="' . self::$registerPassword . '" />
+                        <label for="' . self::$passwordRepeat . '">Repeat Password :</label>
+                        <input type="password" id="' . self::$passwordRepeat . '" name="' . self::$passwordRepeat . '" />
+                        <input type="submit" name="' . self::$submitSignup . '" value="SignUp" />
+                    </fieldset>
+                </form>';
+    }
+
+    public function isNavigatingToLogin() : bool {
         return isset($_GET[self::$loginForm]);
     }
 
 
-    public function isTryingToSignup() : bool
-    {
+    public function isTryingToSignup() : bool {
 		return isset($_POST[self::$submitSignup]);
 	}
 
 
-    public function getRequestUserNameFromRegistration()
-    {
-        if (isset($_POST[self::$registerName])) {
+    public function getRequestUserNameFromRegistration() {
+        if (isset($_POST[self::$registerName])){
             return $_POST[self::$registerName];
+        } else {
+            return '';
         }
     }
 
-    public function getRequestPasswordFromRegistration() : string
-    {
+
+    public function getRequestPasswordFromRegistration() : string {
         if (isset($_POST[self::$registerPassword])) {
             return $_POST[self::$registerPassword];
         } else {
@@ -67,19 +80,17 @@ class RegisterView {
     }
 
 
-    public function isUsernameTooShort() : bool
-    {
+    public function isUsernameTooShort() : bool {
         return strlen($this->getRequestUserNameFromRegistration()) < 3;
     }
 
-    public function isPasswordTooShort() : bool
-    {
+
+    public function isPasswordTooShort() : bool {
         return strlen($this->getRequestPasswordFromRegistration()) < 6;
     }
     
     
-    public function validationMessageRegister() : string
-    {
+    public function validationMessageRegister() : string {
         if (!ctype_alnum($this->getRequestUserNameFromRegistration()) && !empty($this->getRequestUserNameFromRegistration())) {
             return 'Username contains invalid characters.';
         }
@@ -94,20 +105,25 @@ class RegisterView {
 
         if ($this->isPasswordTooShort()) {
             return ' Password has too few characters, at least 6 characters.';
-        } else if ($this->getRequestPasswordFromRegistration() != $_POST[self::$passwordRepeat]) {
-            echo gettype($_POST[self::$registerPassword]);
-            echo gettype($_POST[self::$passwordRepeat]);
 
+        } else if ($this->getRequestPasswordFromRegistration() != $_POST[self::$passwordRepeat]) {
             return 'Passwords do not match.';
 
         } else if ($this->getRequestUserNameFromRegistration() == $this->correctCredentials->username) {
-
             return 'User exists, pick another username.';
 
         } else {
 
             return 'Registered new user.';
         }
+    }
+
+
+    public function isUserValid() : bool {
+        if ($this->validationMessageRegister() == 'Registered new user.') {
+            return true;
+        } else 
+        return false;
     }
 
 

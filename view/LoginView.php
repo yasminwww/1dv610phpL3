@@ -41,11 +41,11 @@ class LoginView
 	public function response() {
 
 		if ($this->isLoggingOut()) {
-			return $this->generateLoginFormHTML('Bye bye!');
+			return $this->generateLoginFormHTML($this->logoutMessage());
 		}
 		if ($this->registerView->isTryingToSignup()) {
 			
-			if ($this->registerView->validationMessageRegister() == 'Registered new user.') {
+			if ($this->registerView->isUserValid() == true) {
 
 				return $this->generateLoginFormHTML($this->registerView->validationMessageRegister());
 
@@ -63,7 +63,7 @@ class LoginView
 			if ($this->isAuthorised() && !isset($_SESSION['already-loggedin'])) {
 
 				$_SESSION['already-loggedin'] = true;
-				return $this->generateLogoutButtonHTML('Welcome');
+				return $this->generateLogoutButtonHTML($this->welcomeMessage());
 
 			} else if ($this->isAuthorised() && isset($_SESSION['already-loggedin'])) {
 
@@ -190,5 +190,12 @@ class LoginView
 	public function getCredentialsInForm()
 	{
 		return new Credentials($this->getRequestUserName(), $this->getRequestPassword());
+	}
+
+	public function welcomeMessage() : string {
+		return 'Welcome';
+	}
+	public function logoutMessage() : string {
+		return 'Bye bye!';
 	}
 }

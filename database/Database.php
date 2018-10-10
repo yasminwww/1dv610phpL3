@@ -31,20 +31,27 @@ class Database {
         return $result;
     }
 
-    // public function checkForExistingUser() {
-    // } 
     
     // public function updateUsername() {
     // }
     
 
-    public function saveUser($username, $password) {
+    public function saveUser($username, $password) : void {
 
         $query = "INSERT INTO users(username, password) VALUES ('$username', '$password')";
         $result = $this->query($query);
-
     }
 
+    public function getUserFromDatabase($username, $password) {
+
+        $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+        $result = $this->query($query);
+        if(!$result) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     // public function escapeStringForMySQLQuery($string) {
 
     //   $escaped_string = mysqli_escape_string($this->connection, $string);

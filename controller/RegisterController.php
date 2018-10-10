@@ -3,26 +3,27 @@ class RegisterController
 {
 
     private $database;
+    
+
 
     public function __construct()
     {
-        $this->database;
+        $this->database = new Database();
         $this->registerView = new RegisterView();
+
     }
 
     public function registerUser()
     {
+        if($this->registerView->isTryingToSignup()) {
 
-        $credentials = $this->registerView->getCredentialsInRegisterForm();
+            $credentials = $this->registerView->getCredentialsInRegisterForm();
+        }
         // debug_print_backtrace();
-        if ($credentials->username >= 3 && $credentials->password >= 6) {
+        if ($this->registerView->isUserValid()) {
             
             // Save user to database.
-            
-
-            $_SESSION['username'] = $credentials->username;
-            $_SESSION['password'] = $credentials->password;
-
+            $this->database->saveUser($credentials->username, $credentials->password);
         }
     }
 }

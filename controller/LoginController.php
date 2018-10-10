@@ -6,6 +6,7 @@ class LoginController {
     public function __construct() {
 
         $this->loginView = new LoginView();
+        $this->database = new Database();
 
     }
     // IF IS tryingto Login
@@ -15,20 +16,40 @@ class LoginController {
 
        $credentials = $this->loginView->getCredentialsInForm();
         // Change correct credentials to database query.
-       if ($credentials->username == $this->loginView->correctCredentials->username &&
-           $credentials->password == $this->loginView->correctCredentials->password) {
-           $_SESSION['username'] = $credentials->username;
-           $_SESSION['password'] = $credentials->password;
+        $username = $credentials->username;
+        $password = $credentials->password;
+       if ($this->database->getUserFromDatabase($username, $password)) {
+          
+          
+          
+            $_SESSION['username'] = $credentials->username;
+            $_SESSION['password'] = $credentials->password;
+            // echo $_SESSION['username'];
    
-           if($this->loginView->keepMeLoggedIn()) {
-               $this->setCookieLife();
+        //    if($this->loginView->keepMeLoggedIn()) {
+        //        $this->setCookie();
    
-               echo $_COOKIE[$cookie];
-           }
+        //        echo $_COOKIE[$cookie];
+        //    }
         }    
     }
 
-    // public function setCookieLife()
+    
+
+    // public function logout() {
+
+    // }
+
+    // public function isAuthorised() : bool
+	// {
+    //     $username = $_SESSION['username'];
+    //     $password = $_SESSION['password'];
+
+    //     return isset($username) && isset($password) &&  
+    //            $this->database->getUserFromDatabase($username, $password) == true;
+	// }
+
+    // public function setCookie()
     // {   
     //     $cookie = 'user';
     //     setcookie($cookie, rand(1, 100000), time() + (86400 * 30));

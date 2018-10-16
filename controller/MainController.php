@@ -14,9 +14,7 @@ class MainController
     // private $loginController;
 
     private $database;
-
     private $credentials;
-
 
 
     public function __construct() {
@@ -27,8 +25,6 @@ class MainController
         $this->database = new Database();
 
         $this->credentials = $this->registerView->getCredentialsInRegisterForm();
-
-
 
         // $this->registerController = new RegisterController();
         // $this->loginController = new LoginController();

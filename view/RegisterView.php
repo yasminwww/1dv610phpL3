@@ -11,27 +11,19 @@ class RegisterView {
     private static $loginForm = 'login';
     private static $registerMessageId = 'RegisterView::Message';
     
+    private $message = '';
+    private $database;
 
 	public function __construct() {
-		$this->correctCredentials = new Credentials('Admin', 'Password');
+        $this->database = new Database();
     }
-    
 
-    // public function response() {
-
-	// 	if ($this->registerView->isTryingToSignup()) {
-			
-	// 		if ($this->registerView->isUserValid() == true) {
-
-	// 			return $this->generateLoginFormHTML($this->registerView->validationMessageRegister());
-
-	// 		} else {
-
-	// 			return $this->registerView->generateRegisterFormHTML($this->registerView->validationMessageRegister());
-	// 		}
-	// 	}
-    // }
-
+    public function response($isLoggedIn) {
+        if (!$isLoggedIn) {
+            $response = $this->generateRegisterFormHTML($this->message);
+        }
+        return $response;
+    }
     public function generateRegisterFormHTML($message) {
 
         return '
@@ -62,7 +54,7 @@ class RegisterView {
 	}
 
 
-    public function getRequestUserNameFromRegistration() {
+    public function getRequestUserNameFromRegistration() : string {
         if (isset($_POST[self::$registerName])){
             return $_POST[self::$registerName];
         } else {
@@ -91,6 +83,7 @@ class RegisterView {
     
     
     public function validationMessageRegister() : string {
+
         if (!ctype_alnum($this->getRequestUserNameFromRegistration()) && !empty($this->getRequestUserNameFromRegistration())) {
             return 'Username contains invalid characters.';
         }
@@ -109,7 +102,7 @@ class RegisterView {
         } else if ($this->getRequestPasswordFromRegistration() != $_POST[self::$passwordRepeat]) {
             return 'Passwords do not match.';
 
-        } else if ($this->getRequestUserNameFromRegistration() == $this->correctCredentials->username) {
+        } else if ($this->database->checkForExistingUsername($this->getRequestUserNameFromRegistration())) {
             return 'User exists, pick another username.';
 
         } else {
@@ -126,6 +119,9 @@ class RegisterView {
         return false;
     }
 
+    public function setMessage($message) {
+        $this->message = $message;
+    }
 
     public function getCredentialsInRegisterForm()
     {

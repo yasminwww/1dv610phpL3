@@ -9,6 +9,7 @@ class Database {
 
     function __construct() {
         $this->open_db_connection();
+        // $this->createTable();
     }
 
     public function getConnection () {
@@ -42,6 +43,7 @@ class Database {
         $result = $this->query($query);
     }
 
+
     public function getUserFromDatabase($username, $password) {
 
         $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
@@ -51,6 +53,35 @@ class Database {
         } else {
             return true;
         }
+    }
+
+    
+    public function checkForExistingUsername($username) {
+
+        $query = "SELECT * FROM users WHERE username = '$username'";
+        $result = $this->query($query);
+        if(!$result) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    public function checkForExistingPassword($password) {
+
+        $query = "SELECT * FROM users WHERE password = '$password'";
+        $result = $this->query($query);
+        if(!$result) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function createTable() {
+      return $sql = "CREATE TABLE IF NOT EXISTS users(
+            username VARCHAR(13) NOT NULL,
+            password VARCHAR(13) NOT NULL
+        )";
     }
     // public function escapeStringForMySQLQuery($string) {
 

@@ -1,18 +1,5 @@
 <?php
 
-
-class Credentials
-{
-	public $username;
-	public $password;
-
-	public function __construct(string $username, string $password)
-	{
-		$this->username = $username;
-		$this->password = $password;
-	}
-}
-
 class LoginView
 {
 
@@ -28,56 +15,63 @@ class LoginView
 	private static $cookiePassword = "LoginView::CookiePassword";
 
 
-	public $correctCredentials;
-
+	private $message = '';
+	private $database;
 
 	public function __construct()
 	{
 		$this->registerView = new RegisterView();
-		$this->correctCredentials = new Credentials('Admin', 'Password');
-
+		$this->database = new Database();
 	}
+    public function response($isLoggedIn) {
+        if ($isLoggedIn) {
+            $response = $this->generateLogoutButtonHTML($this->message);
+        } else {
+            $response = $this->generateLoginFormHTML($this->message);
+        }
+        return $response;
+	}
+	
+	// public function response() {
 
-	public function response() {
-
-		if ($this->isLoggingOut()) {
-			return $this->generateLoginFormHTML($this->logoutMessage());
-		}
-		if ($this->registerView->isTryingToSignup()) {
+	// 	if ($this->isLoggingOut()) {
+	// 		return $this->generateLoginFormHTML($this->logoutMessage());
+	// 	}
+	// 	if ($this->registerView->isTryingToSignup()) {
 			
-			if ($this->registerView->isUserValid() == true) {
+	// 		if ($this->registerView->isUserValid()) {
 
-				return $this->generateLoginFormHTML($this->registerView->validationMessageRegister());
+	// 			return $this->generateLoginFormHTML($this->registerView->validationMessageRegister());
 
-			} else {
+	// 		} else {
 
-				return $this->registerView->generateRegisterFormHTML($this->registerView->validationMessageRegister());
-			}
-		}
+	// 			return $this->registerView->generateRegisterFormHTML($this->registerView->validationMessageRegister());
+	// 		}
+	// 	}
 
-		if ($this->isNavigatingToRegistration()) {
-			return $this->registerView->generateRegisterFormHTML('');
-		}
-		if ($this->isTryingToLogin()) {
+	// 	if ($this->isNavigatingToRegistration()) {
+	// 		return $this->registerView->generateRegisterFormHTML('');
+	// 	}
+	// 	if ($this->isTryingToLogin()) {
 
-			if ($this->isAuthorised() && !isset($_SESSION['already-loggedin'])) {
+	// 		if ($this->isAuthorised() && !isset($_SESSION['already-loggedin'])) {
 
-				$_SESSION['already-loggedin'] = true;
-				return $this->generateLogoutButtonHTML($this->welcomeMessage());
+	// 			$_SESSION['already-loggedin'] = true;
+	// 			return $this->generateLogoutButtonHTML($this->welcomeMessage());
 
-			} else if ($this->isAuthorised() && isset($_SESSION['already-loggedin'])) {
+	// 		} else if ($this->isAuthorised() && isset($_SESSION['already-loggedin'])) {
 
-				return $this->generateLogoutButtonHTML('');
+	// 			return $this->generateLogoutButtonHTML('');
 
-			} else {
-				return $this->generateLoginFormHTML($this->validationMessageLogin());
-			}
-		} else if ($this->isAuthorised()) {
-			return $this->generateLogoutButtonHTML('');
-		} else {
-			return $this->generateLoginFormHTML('');
-		}
-	}
+	// 		} else {
+	// 			return $this->generateLoginFormHTML($this->validationMessageLogin());
+	// 		}
+	// 	} else if ($this->isAuthorised()) {
+	// 		return $this->generateLogoutButtonHTML('');
+	// 	} else {
+	// 		return $this->generateLoginFormHTML('');
+	// 	}
+	// }
 
 	/**
 	 * Generate HTML code on the output buffer for the logout button
@@ -146,6 +140,8 @@ class LoginView
 	{
 		if (isset($_POST[self::$name])) {
 			return $_POST[self::$name];
+		} else {
+			return '';
 		}
 	}
 
@@ -153,15 +149,17 @@ class LoginView
 	{
 		if (isset($_POST[self::$password])) {
 			return $_POST[self::$password];
+		} else {
+			return '';
 		}
 	}
 
 
 	public function isAuthorised() : bool
 	{
-		$correct = $this->correctCredentials;
-		return isset($_SESSION['username']) && $_SESSION['username'] == $correct->username &&
-			   isset($_SESSION['password']) && $_SESSION['password'] == $correct->password;
+		// $correct = $this->correctCredentials;
+		return isset($_SESSION['username']) && $this->database->checkForExistingUsername($_SESSION['username']) &&
+			   isset($_SESSION['password']) && $this->database->checkForExistingPassword($_SESSION['password']);
 	}
 
 
@@ -176,8 +174,7 @@ class LoginView
 
 			return 'Password is missing';
 
-		} else if ($this->getRequestUserName() != $this->correctCredentials->username ||
-			       $this->getRequestPassword() != $this->correctCredentials->password) {
+		} else if (!($this->database->getUserFromDatabase($this->getRequestUserName(), $this->getRequestPassword()))) {
 
 			return 'Wrong name or password';
 
@@ -186,6 +183,11 @@ class LoginView
 			return '';
 		}
 	}
+
+	
+    public function setMessage($message) {
+        $this->message = $message;
+    }
 
 	public function getCredentialsInForm()
 	{

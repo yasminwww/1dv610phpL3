@@ -28,7 +28,6 @@ class MainController
 
         // $this->registerController = new RegisterController();
         // $this->loginController = new LoginController();
-
     }
 
     public function runLoginOrRegister() {
@@ -52,31 +51,26 @@ class MainController
         }
             // Default
             $this->renderHTML($this->loginView);
-
     }
 
 
     public function Login() {
         $credentials = $this->loginView->getCredentialsInForm();
-        echo $credentials->username;
-         // Change correct credentials to database query.
+
          $username = $credentials->username;
          $password = $credentials->password;
          
-        if ($this->database->getUserFromDatabase($username, $password)) {
+        if ($this->database->checkForExistingUsername($username) &&
+            $this->database->checkForExistingPassword($password)) {
            
              $_SESSION['username'] = $credentials->username;
              $_SESSION['password'] = $credentials->password;
          }    
-        //  $this->renderHTML($this->loginView);
-
      }
 
      public function registerUser() {
          if($this->registerView->isTryingToSignup()) {
-            
             // $credentials = $this->registerView->getCredentialsInRegisterForm();
-
             $this->registerView->setMessage($this->registerView->validationMessageRegister());
          }
          
@@ -87,12 +81,12 @@ class MainController
                  echo 'user finns';
                 $this->loginView->setMessage($this->registerView->validationMessageRegister());
                 // Save user to database.
-                $this->database->saveUser($this->credentials->username, $this->credentials->password);
             } else {
+                $this->database->saveUser($this->credentials->username, $this->credentials->password);
                 echo 'user finns inte';
             }
             $this->renderHTML($this->loginView);
-     }
+        }
     }
 
      private function renderHTML($view) {

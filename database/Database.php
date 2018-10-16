@@ -23,6 +23,7 @@ class Database {
             die("database failed" . $this->connection->connect_error);
         }
     }
+
     // $sql = SQL Sträng med query instruktion.
     public function query($sql) {
         $result = mysqli_query($this->connection, $sql);
@@ -33,10 +34,6 @@ class Database {
     }
 
     
-    // public function updateUsername() {
-    // }
-    
-
     public function saveUser($username, $password) : void {
 
         $query = "INSERT INTO users(username, password) VALUES ('$username', '$password')";
@@ -55,7 +52,7 @@ class Database {
         }
     }
 
-    
+
     public function checkForExistingUsername($username) {
 
         $query = "SELECT * FROM users WHERE username = '$username'";
@@ -66,6 +63,8 @@ class Database {
             return true;
         }
     }
+
+
     public function checkForExistingPassword($password) {
 
         $query = "SELECT * FROM users WHERE password = '$password'";
@@ -77,6 +76,7 @@ class Database {
         }
     }
 
+    
     public function createTable() {
       return $sql = "CREATE TABLE IF NOT EXISTS users(
             username VARCHAR(13) NOT NULL,

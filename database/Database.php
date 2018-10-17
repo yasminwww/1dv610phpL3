@@ -27,10 +27,7 @@ class Database {
     // $sql = SQL Sträng med query instruktion.
     public function query($sql) {
         $result = mysqli_query($this->connection, $sql);
-        if(!$result) {
-            die('Query failed.');
-        }
-        return $result;
+        return (!$result ? false : $result);
     }
 
     
@@ -41,42 +38,26 @@ class Database {
     }
 
 
-    public function getUserFromDatabase($username, $password) {
+    public function isExistingUsername($username) {
 
-        $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+        $query = "SELECT COUNT(*) FROM users WHERE username = '$username'";
         $result = $this->query($query);
-        if(!$result) {
-            return false;
-        } else {
-            return true;
-        }
+        echo 'true';
+        echo true;
+        echo 'false';
+        echo false;
+        return (!$result ? false : true);
     }
 
 
-    public function checkForExistingUsername($username) {
+    // public function checkForExistingPassword($password) {
 
-        $query = "SELECT * FROM users WHERE username = '$username'";
-        $result = $this->query($query);
-        if(!$result) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+    //     $query = "SELECT * FROM users WHERE password = '$password'";
+    //     $result = $this->query($query);
+    //     return (!$result ? false : true);
+    // }
 
 
-    public function checkForExistingPassword($password) {
-
-        $query = "SELECT * FROM users WHERE password = '$password'";
-        $result = $this->query($query);
-        if(!$result) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    
     public function createTable() {
       return $sql = "CREATE TABLE IF NOT EXISTS users(
             username VARCHAR(13) NOT NULL,
@@ -88,4 +69,14 @@ class Database {
     //   $escaped_string = mysqli_escape_string($this->connection, $string);
     //   return $escaped_string;
     // }
+
+        public function isCorrectPasswordForUsername($username, $password) {
+
+        $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+        $result = $this->query($query);
+        //$numberOfRows = mysqli_num_rows($result);
+        //return $numberOfRows > 0;
+        // var_dump($result);
+        return $result->num_rows > 0;
+    }
 }

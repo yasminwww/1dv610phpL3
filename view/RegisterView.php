@@ -20,9 +20,8 @@ class RegisterView {
 
     public function response($isLoggedIn) {
         if (!$isLoggedIn) {
-            $response = $this->generateRegisterFormHTML($this->message);
+          return  $this->generateRegisterFormHTML($this->message);
         }
-        return $response;
     }
     public function generateRegisterFormHTML($message) {
 
@@ -55,20 +54,12 @@ class RegisterView {
 
 
     public function getRequestUserNameFromRegistration() : string {
-        if (isset($_POST[self::$registerName])){
-            return $_POST[self::$registerName];
-        } else {
-            return '';
-        }
+        return (isset($_POST[self::$registerName]) ? $_POST[self::$registerName] : '');
     }
 
 
     public function getRequestPasswordFromRegistration() : string {
-        if (isset($_POST[self::$registerPassword])) {
-            return $_POST[self::$registerPassword];
-        } else {
-            return '';
-        }
+        return (isset($_POST[self::$registerPassword]) ? $_POST[self::$registerPassword] : '');
     }
 
 
@@ -102,7 +93,7 @@ class RegisterView {
         } else if ($this->getRequestPasswordFromRegistration() != $_POST[self::$passwordRepeat]) {
             return 'Passwords do not match.';
 
-        } else if ($this->database->checkForExistingUsername($this->getRequestUserNameFromRegistration())) {
+        } else if ($this->database->isExistingUsername($this->getRequestUserNameFromRegistration())) {
             return 'User exists, pick another username.';
 
         } else {
@@ -113,19 +104,16 @@ class RegisterView {
 
 
     public function isUserValid() : bool {
-        if ($this->validationMessageRegister() == 'Registered new user.') {
-            return true;
-        } else 
-        return false;
+        return ($this->validationMessageRegister() == 'Registered new user.' ? true : false);
     }
 
     public function setMessage($message) {
         $this->message = $message;
     }
 
-    public function getCredentialsInRegisterForm()
+    public function getCredentialsInForm()
     {
         return new Credentials($this->getRequestUserNameFromRegistration(), $this->getRequestPasswordFromRegistration());
     }
     
-    }
+}

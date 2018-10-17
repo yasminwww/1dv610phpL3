@@ -138,28 +138,20 @@ class LoginView
 
 	public function getRequestUserName()
 	{
-		if (isset($_POST[self::$name])) {
-			return $_POST[self::$name];
-		} else {
-			return '';
-		}
+		return (isset($_POST[self::$name]) ? $_POST[self::$name] : '');
+
 	}
 
 	public function getRequestPassword()
 	{
-		if (isset($_POST[self::$password])) {
-			return $_POST[self::$password];
-		} else {
-			return '';
-		}
+		return (isset($_POST[self::$password]) ? $_POST[self::$password] : '');
 	}
 
 
 	public function isAuthorised() : bool
 	{
-		// $correct = $this->correctCredentials;
-		return isset($_SESSION['username']) && $this->database->checkForExistingUsername($_SESSION['username']) &&
-			   isset($_SESSION['password']) && $this->database->checkForExistingPassword($_SESSION['password']);
+		return isset($_SESSION['username']) && isset($_SESSION['password']) && 
+			   $this->database->isExistingUsername($_SESSION['username']);
 	}
 
 
@@ -174,7 +166,7 @@ class LoginView
 
 			return 'Password is missing';
 
-		} else if (!($this->database->getUserFromDatabase($this->getRequestUserName(), $this->getRequestPassword()))) {
+		} else if (!$this->database->isCorrectPasswordForUsername($this->getRequestUserName(), $this->getRequestPassword())) {
 
 			return 'Wrong name or password';
 

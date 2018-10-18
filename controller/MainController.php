@@ -34,14 +34,16 @@ class MainController
             $this->loginView->setMessage($this->loginView->logoutMessage());
             $this->layoutView->render(false, $this->loginView, $this->timeView);
             return;
-    }
-        if($this->loginView->isNavigatingToRegistration()) {
-              $this->registerUser();
-                $this->layoutView->render(false, $this->registerView, $this->timeView);
-        }
-        else if ($this->loginView->isTryingToLogin()) {
+        } else if($this->loginView->isNavigatingToRegistration()) {
+
+            if($this->registerUser()) {
+                return $this->layoutView->render(false, $this->loginView, $this->timeView);
+            } else {
+                return $this->layoutView->render(false, $this->registerView, $this->timeView);
+            }
+
+        } else if ($this->loginView->isTryingToLogin()) {
             $this->loginView->setMessage($this->loginView->validationMessageLogin());
-            // Todo
             $this->login();
             
         }
@@ -62,20 +64,13 @@ class MainController
 
     public function login() {
         $credentials = $this->loginView->getCredentialsInForm();
-        $username = $credentials->username;
-        $password = $credentials->password;
+        $username = $credentials->getUsername();
+        $password = $credentials->getPassword();
 
         if($this->loginView->isTryingToLogin()) {
-            // echo ($this->database->checkForExistingUsername($username));
-            // echo 'ett';
-
-         // TODO : something wrong here.
          if (!$this->database->isCorrectPasswordForUsername($username, $password)) {
-                echo 'Wrong credentials';
                 return false;
-
             } else {
-                echo 'Right credentials';
                 $_SESSION['username'] = $credentials->getUsername();
                 $_SESSION['password'] = $credentials->getPassword();
                 // loginmessage
@@ -84,32 +79,29 @@ class MainController
                 return true;
             }
          }
-        }
+    }
 
      public function registerUser() {
         $credentials = $this->registerView->getCredentialsInForm();
         $username = $credentials->getUsername();
         $password = $credentials->getPassword();
 
-
-         if($this->registerView->isTryingToSignup()) {
+        if($this->registerView->isTryingToSignup()) {
+             
             $this->registerView->setMessage($this->registerView->validationMessageRegister());
-            // $this->registerView->setMessage($this->validateInput->validationMessageRegister());
 
-         }
-         if ($this->registerView->isUserValid()) {
-             // Check is user already exists.
-            if($this->database->isExistingUsername($username)) {
-                 echo 'user finns';
-                $this->loginView->setMessage($this->registerView->validationMessageRegister());
-                // Save user to database.
-            } else {
-                echo 'user finns inte';
-                $this->database->saveUser($username, $password);
-            }
+        if ($this->registerView->isUserValid()) {
+            $this->loginView->setMessage($this->registerView->validationMessageRegister());
+            $this->database->saveUser($username, $password);
+            return true;
+           } else {
+               return false;
+           }
+
         }
     }
 }
+
 
 
 

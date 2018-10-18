@@ -23,8 +23,9 @@ class Database {
         }
     }
 
-    // $sql = SQL Sträng med query instruktion.
+
     public function query($sql) {
+
         $result = mysqli_query($this->connection, $sql);
         return (!$result ? false : $result);
     }
@@ -37,14 +38,14 @@ class Database {
     }
 
 
-    public function isExistingUsername($username) {
+    public function isExistingUsername($username) : bool {
 
         $query = "SELECT * FROM users WHERE username = '$username'";
         $result = $this->query($query);
         return $result->num_rows > 0;
     }
 
-    public function isCorrectPasswordForUsername($username, $password) {
+    public function isCorrectPasswordForUsername($username, $password) : bool {
 
         $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
         $result = $this->query($query);
@@ -57,6 +58,6 @@ class Database {
                     id INT NOT NULL AUTO_INCREMENT,
                     username VARCHAR(13) NOT NULL,
                     password VARCHAR(13) NOT NULL
-          )";
-      }
+                    )";
+    }
 }

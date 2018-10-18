@@ -93,7 +93,7 @@ class RegisterView {
         } else if ($this->getRequestPasswordFromRegistration() != $_POST[self::$passwordRepeat]) {
             return 'Passwords do not match.';
 
-        } else if ($this->database->isExistingUsername($this->getRequestUserNameFromRegistration()) == true) {
+        } else if ($this->database->isExistingUsername($this->getRequestUserNameFromRegistration())) {
             return 'User exists, pick another username.';
 
         } else {

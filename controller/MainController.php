@@ -7,7 +7,6 @@ class MainController
     private $layoutView;
     private $loginView;
     private $timeView;
-
     private $registerView;
 
     // private $registerController;
@@ -41,11 +40,9 @@ class MainController
             } else {
                 return $this->layoutView->render(false, $this->registerView, $this->timeView);
             }
-
         } else if ($this->loginView->isTryingToLogin()) {
             $this->loginView->setMessage($this->loginView->validationMessageLogin());
             $this->login();
-            
         }
             // Default
             $this->renderHTML($this->loginView);

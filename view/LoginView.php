@@ -23,6 +23,8 @@ class LoginView
 		$this->registerView = new RegisterView();
 		$this->database = new Database();
 	}
+
+
     public function response($isLoggedIn) {
         if ($isLoggedIn) {
             $response = $this->generateLogoutButtonHTML($this->message);
@@ -31,47 +33,7 @@ class LoginView
         }
         return $response;
 	}
-	
-	// public function response() {
 
-	// 	if ($this->isLoggingOut()) {
-	// 		return $this->generateLoginFormHTML($this->logoutMessage());
-	// 	}
-	// 	if ($this->registerView->isTryingToSignup()) {
-			
-	// 		if ($this->registerView->isUserValid()) {
-
-	// 			return $this->generateLoginFormHTML($this->registerView->validationMessageRegister());
-
-	// 		} else {
-
-	// 			return $this->registerView->generateRegisterFormHTML($this->registerView->validationMessageRegister());
-	// 		}
-	// 	}
-
-	// 	if ($this->isNavigatingToRegistration()) {
-	// 		return $this->registerView->generateRegisterFormHTML('');
-	// 	}
-	// 	if ($this->isTryingToLogin()) {
-
-	// 		if ($this->isAuthorised() && !isset($_SESSION['already-loggedin'])) {
-
-	// 			$_SESSION['already-loggedin'] = true;
-	// 			return $this->generateLogoutButtonHTML($this->welcomeMessage());
-
-	// 		} else if ($this->isAuthorised() && isset($_SESSION['already-loggedin'])) {
-
-	// 			return $this->generateLogoutButtonHTML('');
-
-	// 		} else {
-	// 			return $this->generateLoginFormHTML($this->validationMessageLogin());
-	// 		}
-	// 	} else if ($this->isAuthorised()) {
-	// 		return $this->generateLogoutButtonHTML('');
-	// 	} else {
-	// 		return $this->generateLoginFormHTML('');
-	// 	}
-	// }
 
 	/**
 	 * Generate HTML code on the output buffer for the logout button
@@ -183,7 +145,7 @@ class LoginView
 
 	public function getCredentialsInForm()
 	{
-		return new Credentials($this->getRequestUserName(), $this->getRequestPassword());
+		return new Credentials($this->getRequestUserName(), $this->getRequestPassword(), $this->set);
 	}
 
 	public function welcomeMessage() : string {

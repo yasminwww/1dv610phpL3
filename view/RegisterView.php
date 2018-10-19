@@ -62,6 +62,9 @@ class RegisterView {
         return (isset($_POST[self::$registerPassword]) ? $_POST[self::$registerPassword] : '');
     }
 
+    public function getRequestPasswordRepeatFromRegistration() : string {
+        return (isset($_POST[self::$passwordRepeat]) ? $_POST[self::$passwordRepeat] : '');
+    }
 
     public function isUsernameTooShort() : bool {
         return strlen($this->getRequestUserNameFromRegistration()) < 3;

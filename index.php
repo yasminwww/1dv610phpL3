@@ -18,7 +18,9 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 session_start();
+$db = new Database();
+$db->createTable();
 
 $lv = new LayoutView();
-$controller = new MainController($lv);
+$controller = new MainController($lv, $db);
 $controller->runLoginOrRegister(); //renderHTML();

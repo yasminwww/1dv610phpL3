@@ -1,8 +1,7 @@
 <?php
 
 
-class MainController
-{
+class MainController {
 
     private $layoutView;
     private $loginView;
@@ -16,12 +15,12 @@ class MainController
     private $credentials;
 
 
-    public function __construct(LayoutView $layoutView) {
+    public function __construct(LayoutView $layoutView, Database $db) {
         $this->layoutView = $layoutView;
         $this->loginView = new LoginView();
         $this->timeView = new DateTimeView();
         $this->registerView = new RegisterView();
-        $this->database = new Database();
+        $this->database = $db;
     }
 
     public function runLoginOrRegister() {
@@ -77,14 +76,13 @@ class MainController
 
      public function registerUser() {
         $credentials = $this->registerView->getCredentialsInForm();
-        $username = $credentials->getUsername();
-        $password = $credentials->getPassword();
+        $passwordRepeat = $this->registerView->getRequestPasswordRepeatFromRegistration();
 
-        if($this->registerView->isTryingToSignup()) {
-            $this->registerView->setMessage($this->registerView->validationMessageRegister());
+        if ($this->registerView->isTryingToSignup()) {
+            $this->registerView->setMessage($this->registerView->validationMessageRegister($credentials, $passwordRepeat));
 
         if ($this->registerView->isUserValid()) {
-            $this->loginView->setMessage($this->registerView->validationMessageRegister());
+            $this->loginView->setMessage($this->registerView->validationMessageRegister($credentials, $passwordRepeat));
             $this->database->saveUser($username, $password);
             return true;
            } else {
@@ -93,7 +91,3 @@ class MainController
         }
     }
 }
-
-
-
-

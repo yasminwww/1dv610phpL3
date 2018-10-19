@@ -83,7 +83,7 @@ class MainController {
 
         if ($this->registerView->isUserValid()) {
             $this->loginView->setMessage($this->registerView->validationMessageRegister($credentials, $passwordRepeat));
-            $this->database->saveUser($username, $password);
+            $this->database->saveUser($credentials->getUsername(), $credentials->getPassword());
             return true;
            } else {
                return false;

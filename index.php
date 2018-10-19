@@ -11,6 +11,8 @@ require_once('view/LayoutView.php');
 require_once('view/RegisterView.php');
 require_once('model/Credentials.php');
 require_once('database/Database.php');
+require_once('model/InputValidation.php');
+
 
 
 //MAKE SURE ERRORS ARE SHOWN... MIGHT WANT TO TURN THIS OFF ON A PUBLIC SERVER

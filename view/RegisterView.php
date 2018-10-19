@@ -66,49 +66,6 @@ class RegisterView {
         return (isset($_POST[self::$passwordRepeat]) ? $_POST[self::$passwordRepeat] : '');
     }
 
-    public function isUsernameTooShort() : bool {
-        return strlen($this->getRequestUserNameFromRegistration()) < 3;
-    }
-
-
-    public function isPasswordTooShort() : bool {
-        return strlen($this->getRequestPasswordFromRegistration()) < 6;
-    }
-    
-    
-    public function validationMessageRegister() : string {
-
-        if (!ctype_alnum($this->getRequestUserNameFromRegistration()) && !empty($this->getRequestUserNameFromRegistration())) {
-            return 'Username contains invalid characters.';
-        }
-
-        if ($this->isUsernameTooShort() && $this->isPasswordTooShort()) {
-            return 'Username has too few characters, at least 3 characters. Password has too few characters, at least 6 characters.';
-        }
-
-        if ($this->isUsernameTooShort()) {
-            return 'Username has too few characters, at least 3 characters.';
-        }
-
-        if ($this->isPasswordTooShort()) {
-            return ' Password has too few characters, at least 6 characters.';
-
-        } else if ($this->getRequestPasswordFromRegistration() != $_POST[self::$passwordRepeat]) {
-            return 'Passwords do not match.';
-
-        } else if ($this->database->isExistingUsername($this->getRequestUserNameFromRegistration())) {
-            return 'User exists, pick another username.';
-
-        } else {
-
-            return 'Registered new user.';
-        }
-    }
-
-
-    public function isUserValid() : bool {
-        return ($this->validationMessageRegister() == 'Registered new user.' ? true : false);
-    }
 
     public function setMessage($message) {
         $this->message = $message;

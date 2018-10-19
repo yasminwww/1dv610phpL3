@@ -117,25 +117,8 @@ class LoginView
 	}
 
 
-	public function validationMessageLogin() : string
-	{
-
-		if (empty($this->getRequestUserName())) {
-
-			return 'Username is missing';
-
-		} else if (empty($this->getRequestPassword())) {
-
-			return 'Password is missing';
-
-		} else if (!$this->database->isCorrectPasswordForUsername($this->getRequestUserName(), $this->getRequestPassword())) {
-
-			return 'Wrong name or password';
-
-		} else {
-
-			return '';
-		}
+	public function isKeepUserLoggedIn() {
+		return isset($_POST[self::$keep]);
 	}
 
 	
@@ -143,14 +126,17 @@ class LoginView
         $this->message = $message;
     }
 
+
 	public function getCredentialsInForm()
 	{
 		return new Credentials($this->getRequestUserName(), $this->getRequestPassword());
 	}
 
+
 	public function welcomeMessage() : string {
 		return 'Welcome';
 	}
+
 	public function logoutMessage() : string {
 		return 'Bye bye!';
 	}

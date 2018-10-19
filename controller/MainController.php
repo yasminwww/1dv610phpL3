@@ -13,10 +13,12 @@ class MainController {
 
     private $database;
     private $credentials;
+    private $validation;
 
 
     public function __construct(LayoutView $layoutView, Database $db) {
         $this->layoutView = $layoutView;
+        $this->validation = new InputValidation();
         $this->loginView = new LoginView();
         $this->timeView = new DateTimeView();
         $this->registerView = new RegisterView();
@@ -38,7 +40,7 @@ class MainController {
                 return $this->layoutView->render(false, $this->registerView, $this->timeView);
             }
         } else if ($this->loginView->isTryingToLogin()) {
-            $this->loginView->setMessage($this->loginView->validationMessageLogin());
+            $this->loginView->setMessage($this->validation->validationMessageLogin($this->loginView->getCredentialsInForm()));
             $this->login();
         }
             // Default
@@ -78,11 +80,13 @@ class MainController {
         $credentials = $this->registerView->getCredentialsInForm();
         $passwordRepeat = $this->registerView->getRequestPasswordRepeatFromRegistration();
 
-        if ($this->registerView->isTryingToSignup()) {
-            $this->registerView->setMessage($this->registerView->validationMessageRegister($credentials, $passwordRepeat));
+        $message = $this->validation->validationMessageRegister($credentials, $passwordRepeat);
 
-        if ($this->registerView->isUserValid()) {
-            $this->loginView->setMessage($this->registerView->validationMessageRegister($credentials, $passwordRepeat));
+        if ($this->registerView->isTryingToSignup()) {
+            $this->registerView->setMessage($message);
+
+        if ($this->validation->isMessageForValidatedUser($message)) {
+            $this->loginView->setMessage($message);
             $this->database->saveUser($credentials->getUsername(), $credentials->getPassword());
             return true;
            } else {

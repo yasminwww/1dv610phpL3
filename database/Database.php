@@ -30,14 +30,6 @@ class Database {
         return (!$result ? false : $result);
     }
 
-    
-    public function saveUser($username, $password) : void {
-
-        $query = "INSERT INTO users(username, password) VALUES ('$username', '$password')";
-        $result = $this->query($query);
-    }
-
-
     public function isExistingUsername($username) : bool {
 
         $query = "SELECT * FROM users WHERE username = '$username'";
@@ -51,8 +43,15 @@ class Database {
         $result = $this->query($query);
         return $result->num_rows > 0;
     }
+    
+    
+    public function saveUser($username, $password) : void {
 
+        $query = "INSERT INTO users(username, password) VALUES ('$username', '$password')";
+        $result = $this->query($query);
+    }
 
+    // Not used. 
     public function createTable() {
         return $sql = "CREATE TABLE IF NOT EXISTS users(
                     id INT NOT NULL AUTO_INCREMENT,

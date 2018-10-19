@@ -19,5 +19,6 @@ ini_set('display_errors', 'On');
 
 session_start();
 
-$controller = new MainController();
+$lv = new LayoutView();
+$controller = new MainController($lv);
 $controller->runLoginOrRegister(); //renderHTML();

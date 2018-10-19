@@ -16,14 +16,12 @@ class MainController
     private $credentials;
 
 
-    public function __construct() {
-        $this->layoutView = new LayoutView();
+    public function __construct(LayoutView $layoutView) {
+        $this->layoutView = $layoutView;
         $this->loginView = new LoginView();
         $this->timeView = new DateTimeView();
         $this->registerView = new RegisterView();
         $this->database = new Database();
-        // $this->registerController = new RegisterController();
-        // $this->loginController = new LoginController();
     }
 
     public function runLoginOrRegister() {
@@ -70,9 +68,8 @@ class MainController
             } else {
                 $_SESSION['username'] = $credentials->getUsername();
                 $_SESSION['password'] = $credentials->getPassword();
-                // loginmessage
-                $this->loginView->setMessage($this->loginView->welcomeMessage());
 
+                $this->loginView->setMessage($this->loginView->welcomeMessage());
                 return true;
             }
          }
@@ -84,7 +81,6 @@ class MainController
         $password = $credentials->getPassword();
 
         if($this->registerView->isTryingToSignup()) {
-             
             $this->registerView->setMessage($this->registerView->validationMessageRegister());
 
         if ($this->registerView->isUserValid()) {
@@ -94,7 +90,6 @@ class MainController
            } else {
                return false;
            }
-
         }
     }
 }

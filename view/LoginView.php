@@ -145,7 +145,7 @@ class LoginView
 
 	public function getCredentialsInForm()
 	{
-		return new Credentials($this->getRequestUserName(), $this->getRequestPassword(), $this->set);
+		return new Credentials($this->getRequestUserName(), $this->getRequestPassword());
 	}
 
 	public function welcomeMessage() : string {

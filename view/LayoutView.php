@@ -7,6 +7,7 @@ class LayoutView {
       <html>
         <head>
           <meta charset="utf-8">
+          <link rel="stylesheet" href="./css/main.css">
           <title>Login Example</title>
         </head>
         <body>
@@ -15,7 +16,6 @@ class LayoutView {
           
           <div class="container">
               ' . $v->response($isLoggedIn) . '
-              
               ' . $dtv->time() . '
           </div>
          </body>

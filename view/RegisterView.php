@@ -3,13 +3,12 @@
 class RegisterView {
 
 
-    private static $registerName = 'RegisterView::UserName';
-    private static $registerPassword = 'RegisterView::Password';
-
-    private static $submitSignup = 'RegisterView::Register';
-    private static $passwordRepeat = 'RegisterView::PasswordRepeat';
-    private static $loginForm = 'login';
-    private static $registerMessageId = 'RegisterView::Message';
+    private static $loginForm           = 'login';
+    private static $registerMessageId   = 'RegisterView::Message';
+    private static $registerName        = 'RegisterView::UserName';
+    private static $registerPassword    = 'RegisterView::Password';
+    private static $submitSignup        = 'RegisterView::Register';
+    private static $passwordRepeat      = 'RegisterView::PasswordRepeat';
     
     private $message = '';
     private $database;

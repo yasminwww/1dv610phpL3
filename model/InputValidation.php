@@ -2,14 +2,13 @@
 class InputValidation {
 
     private static $VALIDATED_USER_MESSAGE = 'Registered new user.';
-
     private $database;
 
+
     public function __construct() {
-
         $this->database = new Database();
-
     }
+
 
     public function isUsernameTooShort($username) : bool {
         return strlen($username) < 3;
@@ -19,6 +18,7 @@ class InputValidation {
     public function isPasswordTooShort($password) : bool {
         return strlen($password) < 6;
     }
+
 
     public function validationMessageRegister($credentials, $passwordRepeat) : string {
 
@@ -54,26 +54,21 @@ class InputValidation {
     }
     
 
-    public function isAuthorised() : bool
-        {
+    public function isAuthorised() : bool {
             return isset($_SESSION['username']) && isset($_SESSION['password']) && 
                 $this->database->isExistingUsername($_SESSION['username']);
         }
 
 
-        public function validationMessageLogin($credentials) : string
-        {
-    
+        public function validationMessageLogin($credentials) : string {
+
             if (empty($credentials->getUsername())) {
-    
                 return 'Username is missing';
     
             } else if (empty($credentials->getPassword())) {
-    
                 return 'Password is missing';
     
             } else if (!$this->database->isCorrectPasswordForUsername($credentials->getUsername(), $credentials->getPassword())) {
-    
                 return 'Wrong name or password';
     
             } else {
@@ -81,5 +76,4 @@ class InputValidation {
                 return '';
             }
         }
-
     }

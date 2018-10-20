@@ -17,17 +17,21 @@ class LoginView
 
 	private $message = '';
 	private $database;
+	private $bla;
 
-	public function __construct()
+
+	public function __construct(RegisterView $registerView)
 	{
-		$this->registerView = new RegisterView();
-		$this->database = new Database();
+		$this->registerView = $registerView;
+		$this->bla = new TodoView();
+
 	}
 
 
     public function response($isLoggedIn) {
         if ($isLoggedIn) {
-            $response = $this->generateLogoutButtonHTML($this->message);
+			$response = $this->generateLogoutButtonHTML($this->message);
+			$response .= $this->bla->generateToDoHTML();
         } else {
             $response = $this->generateLoginFormHTML($this->message);
         }
@@ -47,7 +51,7 @@ class LoginView
 			<p id="' . self::$messageId . '">' . $message . '</p>
 			<input type="submit" name="' . self::$logout . '" value="logout" />
 		</form>
-	';
+		';
 	}
 
 
@@ -88,15 +92,18 @@ class LoginView
 		return isset($_POST[self::$login]);
 	}
 
+
 	public function keepMeLoggedIn() : bool
 	{
 		return isset($_POST[self::$keep]);
 	}
 
-	public function isLoggingOut() : bool
+
+	public function isLoggingOut($isAuthorised) : bool
 	{
-		return isset($_POST[self::$logout]) && $this->isAuthorised();
+		return isset($_POST[self::$logout]) && $isAuthorised;
 	}
+
 
 	public function getRequestUserName()
 	{
@@ -104,16 +111,10 @@ class LoginView
 
 	}
 
+
 	public function getRequestPassword()
 	{
 		return (isset($_POST[self::$password]) ? $_POST[self::$password] : '');
-	}
-
-
-	public function isAuthorised() : bool
-	{
-		return isset($_SESSION['username']) && isset($_SESSION['password']) && 
-			   $this->database->isExistingUsername($_SESSION['username']);
 	}
 
 

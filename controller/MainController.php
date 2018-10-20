@@ -88,7 +88,7 @@ class MainController {
                 $this->registerView->setMessage($message);
             if ($this->validation->isMessageForValidatedUser($message)) {
                   $this->loginView->setMessage($message);
-                  $this->database->saveUser($credentials->getUsername(), $credentials->getPassword());
+                  $this->database->saveUser($credentials->getUsername(), md5($credentials->getPassword()));
                 return true;
             } else {
                 return false;

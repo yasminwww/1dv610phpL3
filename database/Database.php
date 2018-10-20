@@ -40,8 +40,8 @@ class Database {
 
     
     public function isCorrectPasswordForUsername($username, $password) : bool {
-
-        $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+        $hashedPassword = md5($password);
+        $query = "SELECT * FROM users WHERE username = '$username' AND password = '$hashedPassword'";
         $result = $this->query($query);
         return $result->num_rows > 0;
     }

@@ -22,7 +22,7 @@ class TodoView {
         }
                         
         return "<div class=list>
-                    <h3>To do's: </h3>
+                    <h3>Todo's: </h3>
                     <ul class='list-group list-group-flush'>
                         $items
                     </ul>

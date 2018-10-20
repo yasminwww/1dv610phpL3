@@ -1,3 +1,15 @@
 html {
-    background-color: gray;
+    background-image: url('../img/background-img.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+
+}
+
+.container {
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.644)
+}
+#inputTodo {
+    width: 40%;
 }

@@ -22,7 +22,7 @@ class TodoView {
         }
                         
         return "<div class=list>
-                    <h3>To do </h3>
+                    <h3>To do's: </h3>
                     <ul class='list-group list-group-flush'>
                         $items
                     </ul>
@@ -32,8 +32,10 @@ class TodoView {
     public function generateTodoHTML(array $todos) {
         $response = '<form method="POST" />
                         <p>' . $this->message . '</p>
-                        <input type="text" name="'. self::$todoText .'" placeholder="Please enter a Todo here" />
+                        <div class="form-group row">
+                        <input type="text"  class="form-control" id="inputTodo" name="'. self::$todoText .'" placeholder="Please enter a Todo here" />
                         <input type="submit" class="btn btn-warning" name="' . self::$submitTodo . '" value="Save" />
+                        </div>
                      </form><br>
         ' . $this->generateTodoListHTML($todos);
         return $response;

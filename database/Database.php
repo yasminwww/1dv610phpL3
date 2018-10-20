@@ -64,7 +64,7 @@ class Database {
     public function getOwnerID($username) {
         $query = "SELECT id FROM users WHERE username = '$username'";
         $result = $this->query($query);
-        return $result->fetch_row()[0];
+        return $result->fetch_all(MYSQLI_ASSOC)[0]['id'];
     }
 
 

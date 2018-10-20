@@ -52,28 +52,23 @@ class InputValidation {
     public function isMessageForValidatedUser($message) : bool {
         return $message == self::$VALIDATED_USER_MESSAGE;
     }
-    
 
-    public function isAuthorised() : bool {
-            return isset($_SESSION['username']) && isset($_SESSION['password']) && 
-                $this->database->isExistingUsername($_SESSION['username']);
-        }
+    public function validationMessageLogin($credentials) : string {
 
+        if (empty($credentials->getUsername())) {
+            return 'Username is missing';
 
-        public function validationMessageLogin($credentials) : string {
+        } else if (empty($credentials->getPassword())) {
+            return 'Password is missing';
 
-            if (empty($credentials->getUsername())) {
-                return 'Username is missing';
-    
-            } else if (empty($credentials->getPassword())) {
-                return 'Password is missing';
-    
-            } else if (!$this->database->isCorrectPasswordForUsername($credentials->getUsername(), $credentials->getPassword())) {
-                return 'Wrong name or password';
-    
-            } else {
-    
-                return '';
-            }
+        } else if (!$this->database->isCorrectPasswordForUsername($credentials->getUsername(), $credentials->getPassword())) {
+            return 'Wrong name or password';
+
+        } else {
+
+            return '';
         }
     }
+
+    //public function validate
+}

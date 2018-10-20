@@ -19,17 +19,17 @@ class RegisterView {
 
     public function response($isLoggedIn) {
         if (!$isLoggedIn) {
-          return  $this->generateRegisterFormHTML($this->message);
+          return  $this->generateRegisterFormHTML();
         }
     }
-    public function generateRegisterFormHTML($message) {
+    public function generateRegisterFormHTML() {
 
         return '
         <a href="?' . self::$loginForm . '">Back to login</a>
                 <form method="POST">
                     <fieldset>
                         <legend>Sign Up - enter Username and password</legend>
-                        <p id="' . self::$registerMessageId . '">' . $message . '</p>
+                        <p id="' . self::$registerMessageId . '">' . $this->message . '</p>
                         
                         <label for="' . self::$registerName . '">Username :</label>
                         <input type="text" id="' . self::$registerName . '" name="' . self::$registerName . '" value="' . strip_tags($this->getRequestUserNameFromRegistration()) . '" />
@@ -37,7 +37,7 @@ class RegisterView {
                         <input type="password" id="' . self::$registerPassword . '" name="' . self::$registerPassword . '" />
                         <label for="' . self::$passwordRepeat . '">Repeat Password :</label>
                         <input type="password" id="' . self::$passwordRepeat . '" name="' . self::$passwordRepeat . '" />
-                        <input type="submit" name="' . self::$submitSignup . '" value="SignUp" />
+                        <input type="submit" class="btn btn-info" name="' . self::$submitSignup . '" value="SignUp" />
                     </fieldset>
                 </form>';
     }

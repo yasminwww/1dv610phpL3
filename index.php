@@ -7,7 +7,6 @@ require_once('controller/MainController.php');
 require_once('model/TodoModel.php');
 require_once('view/TodoView.php');
 require_once('controller/TodoController.php');
-
 require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
@@ -26,11 +25,14 @@ session_start();
 $db = new Database();
 $db->createTable();
 
+$todo = new TodoController($db);
+$todo->createAndSaveTodo();
+
 $v = new LayoutView();
 $rv = new RegisterView();
-$lv = new LoginView($rv);
-$todo = new TodoController($db);
-$todo->createTodo();
+$lv = new LoginView($rv, $todo);
 
-$controller = new MainController($v, $db, $lv, $rv);
-$controller->runLoginOrRegister(); //renderHTML();
+
+$controller = new MainController($v, $db, $lv, $rv, $todo);
+$controller->runLoginOrRegister(); 
+//renderHTML();

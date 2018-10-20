@@ -17,23 +17,20 @@ class LoginView
 
 	private $message = '';
 	private $database;
-	private $bla;
-
 
 	public function __construct(RegisterView $registerView)
 	{
 		$this->registerView = $registerView;
-		$this->bla = new TodoView();
 
 	}
 
 
-    public function response($isLoggedIn) {
+    public function response(bool $isLoggedIn, string $renderedTodoHTML) {
         if ($isLoggedIn) {
-			$response = $this->generateLogoutButtonHTML($this->message);
-			$response .= $this->bla->generateToDoHTML();
+			$response = $this->generateLogoutButtonHTML();
+			$response .= $renderedTodoHTML;
         } else {
-            $response = $this->generateLoginFormHTML($this->message);
+            $response = $this->generateLoginFormHTML();
         }
         return $response;
 	}
@@ -44,12 +41,12 @@ class LoginView
 	 * @param $message, String output message
 	 * @return  void, BUT writes to standard output!
 	 */
-	public function generateLogoutButtonHTML($message)
+	public function generateLogoutButtonHTML()
 	{
 		return '
-		<form method="post">
-			<p id="' . self::$messageId . '">' . $message . '</p>
-			<input type="submit" name="' . self::$logout . '" value="logout" />
+		<form method="POST">
+			<p id="' . self::$messageId . '">' . $this->message . '</p>
+			<input type="submit" class="btn btn-outline-dark float-right" name="' . self::$logout . '" value="logout" />
 		</form>
 		';
 	}
@@ -60,7 +57,7 @@ class LoginView
 	 * @param $message, String output message
 	 * @return  void, BUT writes to standard output!
 	 */
-	public function generateLoginFormHTML($message)
+	public function generateLoginFormHTML()
 	{
 
 		return ' 
@@ -68,14 +65,14 @@ class LoginView
 		<form method="POST">
 		<fieldset>
 					<legend>Login - enter Username and password</legend>
-					<p id="' . self::$messageId . '">' . $message . '</p>
+					<p id="' . self::$messageId . '">' . $this->message . '</p>
 					<label for="' . self::$name . '">Username :</label>
 					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->getRequestUserName() . '" />
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
 					<label for="' . self::$keep . '">Keep me logged in  :</label>
 					<input type="checkbox" id="' . self::$keep . '" name="' . self::$keep . '" />
-					<input type="submit" name="' . self::$login . '" value="Login" />
+					<input type="submit" class="btn btn-info" name="' . self::$login . '" value="Login" />
 				</fieldset>
             </form>
 		';

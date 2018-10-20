@@ -7,6 +7,8 @@ class MainController {
     private $loginView;
     private $timeView;
     private $registerView;
+    private $todoController;
+
 
     // private $registerController;
     // private $loginController;
@@ -16,27 +18,29 @@ class MainController {
     private $validation;
 
 
-    public function __construct(LayoutView $v, Database $db, LoginView $lv, RegisterView $rv) {
+    public function __construct(LayoutView $v, Database $db, LoginView $lv, RegisterView $rv, TodoController $todoController) {
         $this->layoutView   = $v;
         $this->loginView    = $lv;
         $this->registerView = $rv;
         $this->database     = $db;
         $this->validation   = new InputValidation();
         $this->timeView     = new DateTimeView();
+        $this->todoController = $todoController;
     }
 
     public function runLoginOrRegister() {
-        if ($this->loginView->isLoggingOut($this->validation->isAuthorised())) {
+ 
+        if ($this->loginView->isLoggingOut($this->isAuthorised())) {
                 $this->killSession();
                 $this->loginView->setMessage($this->loginView->logoutMessage());
-                $this->layoutView->render(false, $this->loginView, $this->timeView);
+                $this->layoutView->render(false, $this->loginView, $this->timeView, '');
                 return;
         } else if ($this->loginView->isNavigatingToRegistration()) {
 
             if($this->registerUser()) {
-                return $this->layoutView->render(false, $this->loginView, $this->timeView);
+                return $this->layoutView->render(false, $this->loginView, $this->timeView, '');
             } else {
-                return $this->layoutView->render(false, $this->registerView, $this->timeView);
+                return $this->layoutView->render(false, $this->registerView, $this->timeView, '');
             }
         } else if ($this->loginView->isTryingToLogin()) {
             $this->loginView->setMessage($this->validation->validationMessageLogin($this->loginView->getCredentialsInForm()));
@@ -48,7 +52,8 @@ class MainController {
 
 
     private function renderHTML($view) {
-        $this->layoutView->render($this->validation->isAuthorised(), $view, $this->timeView);
+        $renderedTodoHTML = $this->isAuthorised() ? $this->todoController->render() : '';
+        $this->layoutView->render($this->isAuthorised(), $view, $this->timeView, $renderedTodoHTML);
     }
 
 
@@ -89,5 +94,10 @@ class MainController {
                 return false;
             }
         }
+    }
+
+    public function isAuthorised() : bool {
+        return isset($_SESSION['username']) && isset($_SESSION['password']) && 
+            $this->database->isExistingUsername($_SESSION['username']);
     }
 }

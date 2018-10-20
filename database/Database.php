@@ -60,11 +60,24 @@ class Database {
         $result = $this->query($query);
     }
 
+    
     public function getOwnerID($username) {
         $query = "SELECT id FROM users WHERE username = '$username'";
         $result = $this->query($query);
         return $result->fetch_row()[0];
+    }
 
+
+    public function getTodoItemsForUser($ownerID) {
+        $query = "SELECT * FROM todos WHERE ownerID = '$ownerID'";
+        $result = $this->query($query);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+
+    public function deleteTodo($todoID) {
+        $query = "DELETE FROM todos WHERE id = '$todoID'";
+        $result = $this->query($query);
     }
 
     // Not used yet. 

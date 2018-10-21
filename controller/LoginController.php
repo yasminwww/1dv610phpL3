@@ -22,17 +22,14 @@ class LoginController {
         $username = $credentials->getUsername();
         $password = $credentials->getPassword();
 
-        echo 'Credentials LoginController::login';
-        echo $username, $password;
-
         if($this->loginView->isTryingToLogin()) {
-        if ($this->database->isCorrectPasswordForUsername($username, $password)) {
+        if (!$this->database->isCorrectPasswordForUsername($username, $password)) {
+            return false;
+        } else {
             $_SESSION['username'] = $credentials->getUsername();
             $_SESSION['password'] = $credentials->getPassword();
             $this->loginView->setMessage($this->loginView->welcomeMessage());
             return true;
-        } else {
-            return false;
         }
 
        }  

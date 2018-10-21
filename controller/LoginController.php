@@ -25,7 +25,7 @@ class LoginController {
         echo 'Credentials LoginController::login';
         echo $username, $password;
 
-        //if($this->loginView->isTryingToLogin()) {
+        if($this->loginView->isTryingToLogin()) {
         if ($this->database->isCorrectPasswordForUsername($username, $password)) {
             $_SESSION['username'] = $credentials->getUsername();
             $_SESSION['password'] = $credentials->getPassword();
@@ -35,6 +35,6 @@ class LoginController {
             return false;
         }
 
-       // }  
+       }  
     }
 }

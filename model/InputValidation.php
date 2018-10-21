@@ -69,13 +69,19 @@ class InputValidation {
         }
     }
 
+
+    public function isValidTodoText($todoText) : bool {
+        return !empty($todoText);
+    }
+
+    
     public function validateTodoInput($todoText) {
         if (empty($todoText)) {
             return 'Todo textfield is empty!';
 
         } else if(!ctype_alnum($todoText)) {
             return 'Todo contains invalid characters.';
-            
+
         } else {
             return '';
         }

@@ -21,13 +21,14 @@ class TodoController {
         if($this->todoView->isSubmitTodoSet()) {
             $todoText = $this->todoView->getRequestTodoText();
             $ownerID = $this->getCurrentUserID();
-
-            if (empty($todoText) || !ctype_alnum($todoText)) {
+            
+            if (!(empty($todoText) || !ctype_alnum($todoText))) {
+                echo 'Valid todo';
+                $this->database->saveTodo(new TodoModel(-1, $ownerID, $todoText));
+            } else {
+                echo 'invalid todo';
                 // Todo move to validation.
                 $this->todoView->setMessage($this->validation->validateTodoInput($todoText));
-
-            } else {
-                $this->database->saveTodo(new TodoModel(-1, $ownerID, $todoText));
             }
         }
     }

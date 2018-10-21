@@ -45,7 +45,7 @@ class MainController {
             } else {
                 return $this->layoutView->render(false, $this->registerView, $this->timeView, '');
             }
-        } else if ($this->loginView->isTryingToLogin()) {
+        } else if ($this->loginView->isTryingToLogin() && !$this->isAuthorised()) {
             $this->loginController->login();
         }
             // Default view

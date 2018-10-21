@@ -40,7 +40,7 @@ class Database {
         $password = $this->safeString($password);
 
         $hashedPassword = md5($password);
-        $query = "SELECT * FROM users WHERE username = '$username' AND password = '$hashedPassword'";
+        $query = "SELECT * FROM users WHERE BINARY username = '$username' AND password = '$hashedPassword'";
         $result = $this->query($query);
         return $result->num_rows > 0;
     }
@@ -93,6 +93,7 @@ class Database {
     }
 
     public function safeString($param) {
-        return mysqli_real_escape_string($this->connection, $param);
+       return (!ctype_alnum($param) ? '' : mysqli_real_escape_string($this->connection, $param));
+        // return mysqli_real_escape_string($this->connection, $param);
     }
 }

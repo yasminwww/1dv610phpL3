@@ -23,7 +23,6 @@ class TodoController {
             $ownerID = $this->getCurrentUserID();
             
             if (!(empty($todoText) || !ctype_alnum($todoText))) {
-
                 $this->database->saveTodo(new TodoModel(-1, $ownerID, $todoText));
             } else {
 

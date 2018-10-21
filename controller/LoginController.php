@@ -32,6 +32,6 @@ class LoginController {
             return true;
         }
 
-       }  
+       } 
     }
 }

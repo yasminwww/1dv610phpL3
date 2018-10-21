@@ -47,6 +47,7 @@ class MainController {
                 return $this->layoutView->render(false, $this->registerView, $this->timeView, '');
             }
         } else if ($this->loginView->isTryingToLogin() && !$this->isAuthorised()) {
+            $this->loginView->setPrefilledUsername($this->registerView->getRequestUserNameFromRegistration());
             $this->loginController->login();
         }
             // Default view

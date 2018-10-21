@@ -65,12 +65,19 @@ class InputValidation {
             return 'Wrong name or password';
 
         } else {
-
             return '';
         }
     }
 
-    // public function validateTodoInput() {
+    public function validateTodoInput($todoText) {
+        if (empty($todoText)) {
+            return 'Todo textfield is empty!';
 
-    // }
+        } else if(!ctype_alnum($todoText)) {
+            return 'Todo contains invalid characters.';
+            
+        } else {
+            return '';
+        }
+    }
 }

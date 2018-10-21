@@ -5,11 +5,14 @@ class TodoController {
 
     private $todoView;
     private $database;
+    private $validation;
+
 
     
-    public function __construct(Database $db) {
+    public function __construct(Database $db, InputValidation $iv) {
         $this->todoView = new TodoView();
         $this->database = $db;
+        $this->validation = $iv;
         $this->deleteTodo();
     }
 
@@ -19,9 +22,10 @@ class TodoController {
             $todoText = $this->todoView->getRequestTodoText();
             $ownerID = $this->getCurrentUserID();
 
-            if (empty($todoText)) {
+            if (empty($todoText) || !ctype_alnum($todoText)) {
                 // Todo move to validation.
-                $this->todoView->setMessage('Todo textfield is empty!');
+                $this->todoView->setMessage($this->validation->validateTodoInput($todoText));
+
             } else {
                 $this->database->saveTodo(new TodoModel(-1, $ownerID, $todoText));
             }

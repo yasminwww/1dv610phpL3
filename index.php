@@ -33,12 +33,12 @@ $iv = new InputValidation();
 $v = new LayoutView();
 $rv = new RegisterView();
 
-$todo = new TodoController($db);
+$todo = new TodoController($db, $iv);
 $todo->createAndSaveTodo();
 
 $lv = new LoginView($rv, $todo);
 
-$lc = new LoginController($db, $lv);
+$lc = new LoginController($db, $lv, $iv);
 $rc = new RegisterController($db, $rv, $lv, $iv);
 
 

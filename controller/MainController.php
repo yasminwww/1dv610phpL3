@@ -24,7 +24,6 @@ class MainController {
         $this->registerView         = $rv;
         $this->loginController      = $lc;
         $this->database             = $db;
-        $this->validation           = new InputValidation();
         $this->timeView             = new DateTimeView();
         $this->todoController       = $tc;
         $this->registerController   = $rc;
@@ -47,7 +46,6 @@ class MainController {
                 return $this->layoutView->render(false, $this->registerView, $this->timeView, '');
             }
         } else if ($this->loginView->isTryingToLogin()) {
-            $this->loginView->setMessage($this->validation->validationMessageLogin($this->loginView->getCredentialsInForm()));
             $this->loginController->login();
         }
             // Default view

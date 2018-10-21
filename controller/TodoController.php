@@ -2,14 +2,17 @@
 
 class TodoController {
 
+
     private $todoView;
     private $database;
 
+    
     public function __construct(Database $db) {
         $this->todoView = new TodoView();
         $this->database = $db;
         $this->deleteTodo();
     }
+
 
     public function createAndSaveTodo() {
         if($this->todoView->isSubmitTodoSet()) {
@@ -18,7 +21,7 @@ class TodoController {
 
             if (empty($todoText)) {
                 // Todo move to validation.
-                $this->todoView->setMessage('Todo text is empty!');
+                $this->todoView->setMessage('Todo textfield is empty!');
             } else {
                 $this->database->saveTodo(new TodoModel(-1, $ownerID, $todoText));
             }
@@ -32,12 +35,13 @@ class TodoController {
         return $this->todoView->generateTodoHTML($todosArray);
     }
 
+
     public function getCurrentUserID() {
         return $this->database->getOwnerID($_SESSION['username']);
     }
 
-    public function deleteTodo() {
 
+    public function deleteTodo() {
         if($this->todoView->isDeleteSet()) {
             $this->database->deleteTodo($this->todoView->getDeleteID());
         }

@@ -15,7 +15,9 @@ class TodoView {
                 <li class='list-group-item'>
                     $todo->text
                     <form method='POST'>
+
                         <input name='" . self::$todoID . "' value='$todo->id'  type='hidden'>
+                    
                         <input type='submit' class='btn btn-warning float-right' name='". self::$deleteTodo . "' value='Delete'>
                     </form>
                 </li>";
@@ -30,11 +32,11 @@ class TodoView {
     }
 
     public function generateTodoHTML(array $todos) {
-        $response = '<form method="POST" />
+        $response = '<form method="POST">
                         <p>' . $this->message . '</p>
                         <div class="form-group row">
-                        <input type="text"  class="form-control" id="inputTodo" name="'. self::$todoText .'" placeholder="Please enter a Todo here" />
-                        <input type="submit" class="btn btn-warning" name="' . self::$submitTodo . '" value="Save" />
+                        <input type="text"  class="form-control" id="inputTodo" name="'. self::$todoText .'" placeholder="Please enter a Todo here">
+                        <input type="submit" class="btn btn-warning" name="' . self::$submitTodo . '" value="Save">
                         </div>
                      </form><br>
         ' . $this->generateTodoListHTML($todos);
@@ -52,7 +54,7 @@ class TodoView {
     }
 
     public function getDeleteID() : int {
-        return isset($_POST[self::$todoID]) ? $_POST[self::$todoID] : -1;
+        return (isset($_POST[self::$todoID]) ? $_POST[self::$todoID] : -1);
     }
 
     public function setMessage($message) {

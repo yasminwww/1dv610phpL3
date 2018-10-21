@@ -1,38 +1,30 @@
 <?php
 
-// class LoginController {
-//     private $loginView;
+class LoginController {
+    private $database;
+    private $loginView;
 
-//     public function __construct() {
+    public function __construct(Database $db, LoginView $lv) {
 
-//         $this->loginView = new LoginView();
-//         $this->database = new Database();
-
-//     }
-//     // IF IS tryingto Login
-
-//     public function Login(){
+        $this->database = $db;
+        $this->loginView = $lv;
+    }
 
 
-//        $credentials = $this->loginView->getCredentialsInForm();
-//         // Change correct credentials to database query.
-//         $username = $credentials->username;
-//         $password = $credentials->password;
-//        if ($this->database->getUserFromDatabase($username, $password)) {
-          
+    public function login() {
+        $credentials = $this->loginView->getCredentialsInForm();
+        $username = $credentials->getUsername();
+        $password = $credentials->getPassword();
 
-//             $_SESSION['username'] = $credentials->username;
-//             $_SESSION['password'] = $credentials->password;
-//         }    
-//     }
-
-//     // public function isAuthorised() : bool
-// 	// {
-//     //     $username = $_SESSION['username'];
-//     //     $password = $_SESSION['password'];
-
-//     //     return isset($username) && isset($password) &&  
-//     //            $this->database->getUserFromDatabase($username, $password) == true;
-// 	// }
-
-// }
+        if($this->loginView->isTryingToLogin()) {
+        if (!$this->database->isCorrectPasswordForUsername($username, $password)) {
+                return false;
+            } else {
+                $_SESSION['username'] = $credentials->getUsername();
+                $_SESSION['password'] = $credentials->getPassword();
+                $this->loginView->setMessage($this->loginView->welcomeMessage());
+                return true;
+            }
+        }  
+    }
+}

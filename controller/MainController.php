@@ -7,27 +7,31 @@ class MainController {
     private $loginView;
     private $timeView;
     private $registerView;
-    private $todoController;
+    // private $todoController;
+    // private $loginController;
 
 
     // private $registerController;
-    // private $loginController;
 
     private $database;
     private $credentials;
     private $validation;
 
 
-    public function __construct(LayoutView $v, Database $db, LoginView $lv, RegisterView $rv, TodoController $todoController) {
-        $this->layoutView   = $v;
-        $this->loginView    = $lv;
-        $this->registerView = $rv;
-        $this->database     = $db;
-        $this->validation   = new InputValidation();
-        $this->timeView     = new DateTimeView();
-        $this->todoController = $todoController;
+    public function __construct(LayoutView $v, LoginView $lv, RegisterView $rv, TodoController $tc, LoginController $lc,RegisterController $rc, Database $db) {
+        $this->layoutView           = $v;
+        $this->loginView            = $lv;
+        $this->registerView         = $rv;
+        $this->loginController      = $lc;
+        $this->database             = $db;
+        $this->validation           = new InputValidation();
+        $this->timeView             = new DateTimeView();
+        $this->todoController       = $tc;
+        $this->registerController   = $rc;
+
     }
 
+    
     public function runLoginOrRegister() {
  
         if ($this->loginView->isLoggingOut($this->isAuthorised())) {
@@ -37,14 +41,14 @@ class MainController {
                 return;
         } else if ($this->loginView->isNavigatingToRegistration()) {
 
-            if($this->registerUser()) {
+            if($this->registerController->registerUser()) {
                 return $this->layoutView->render(false, $this->loginView, $this->timeView, '');
             } else {
                 return $this->layoutView->render(false, $this->registerView, $this->timeView, '');
             }
         } else if ($this->loginView->isTryingToLogin()) {
             $this->loginView->setMessage($this->validation->validationMessageLogin($this->loginView->getCredentialsInForm()));
-            $this->login();
+            $this->loginController->login();
         }
             // Default view
             $this->renderHTML($this->loginView);
@@ -61,40 +65,6 @@ class MainController {
         session_destroy();
     }
 
-
-    public function login() {
-        $credentials = $this->loginView->getCredentialsInForm();
-        $username = $credentials->getUsername();
-        $password = $credentials->getPassword();
-
-        if($this->loginView->isTryingToLogin()) {
-          if (!$this->database->isCorrectPasswordForUsername($username, $password)) {
-                return false;
-            } else {
-                $_SESSION['username'] = $credentials->getUsername();
-                $_SESSION['password'] = $credentials->getPassword();
-                $this->loginView->setMessage($this->loginView->welcomeMessage());
-                return true;
-            }
-         }
-    }
-
-     public function registerUser() {
-        $credentials = $this->registerView->getCredentialsInForm();
-        $passwordRepeat = $this->registerView->getRequestPasswordRepeatFromRegistration();
-        $message = $this->validation->validationMessageRegister($credentials, $passwordRepeat);
-
-        if ($this->registerView->isTryingToSignup()) {
-                $this->registerView->setMessage($message);
-            if ($this->validation->isMessageForValidatedUser($message)) {
-                  $this->loginView->setMessage($message);
-                  $this->database->saveUser($credentials->getUsername(), md5($credentials->getPassword()));
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
 
     public function isAuthorised() : bool {
         return isset($_SESSION['username']) && isset($_SESSION['password']) && 

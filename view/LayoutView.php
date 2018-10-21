@@ -11,20 +11,19 @@ class LayoutView {
           <link rel="stylesheet" href="./css/main.css">
           <title>Login Example</title>
         </head>
-        <body class="container">
+        <body>
+        <div class="container" id="container">
           <h1>Assignment 2</h1>
           ' . $this->renderIsLoggedIn($isLoggedIn) . '
           
-          <div class="container">
-              ' . $v->response($isLoggedIn, $renderedTodoView) . '
+              ' . $v->response($isLoggedIn) . '
               ' . $dtv->time() . '
+              ' . ($isLoggedIn ? $renderedTodoView : '') . '
           </div>
          </body>
       </html>
     ';
   }
-
-  //public function renderTodo() 
   
   public function renderIsLoggedIn($isLoggedIn) {
     if ($isLoggedIn) {

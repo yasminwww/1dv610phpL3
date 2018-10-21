@@ -1,35 +1,38 @@
 <?php
-// class RegisterController
-// {
+class RegisterController
+{
 
-//     private $database;
+    private $database;
+    private $loginView;
+    private $validation;
+    private $registerView;
+
     
 
 
-//     public function __construct()
-//     {
-//         $this->database = new Database();
-//         $this->registerView = new RegisterView();
-//         $this->lv = new LoginView();
+    public function __construct(Database $db, RegisterView $rv, LoginView $lv, InputValidation $iv)
+    {
+        $this->database     = $db;
+        $this->loginView    = $rv;
+        $this->validation   = $iv;
+        $this->registerView = $rv;
+    }
 
+    public function registerUser() {
+        $credentials = $this->registerView->getCredentialsInForm();
+        $passwordRepeat = $this->registerView->getRequestPasswordRepeatFromRegistration();
+        $message = $this->validation->validationMessageRegister($credentials, $passwordRepeat);
 
-//     }
-
-//     public function registerUser()
-//     {
-//         if($this->registerView->isTryingToSignup()) {
-
-//             $credentials = $this->registerView->getCredentialsInRegisterForm();
-//         }
-//         // debug_print_backtrace();
-//         if ($this->registerView->isUserValid()) {
-//             // Check is user already exists.
-//             if($this->database->getUserFromDatabase($credentials->username, $credentials->password)) {
-//                 // return
-//             }
-//             // Save user to database.
-//             $this->database->saveUser($credentials->username, $credentials->password);
-//         }
-//     }
+        if ($this->registerView->isTryingToSignup()) {
+                $this->registerView->setMessage($message);
+            if ($this->validation->isMessageForValidatedUser($message)) {
+                $this->loginView->setMessage($message);
+                $this->database->saveUser($credentials->getUsername(), md5($credentials->getPassword()));
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
     
-// }
+}

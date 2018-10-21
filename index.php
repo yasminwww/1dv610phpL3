@@ -2,16 +2,19 @@
 
 //INCLUDE THE FILES NEEDED...
 require_once('controller/MainController.php');
-// require_once('controller/RegisterController.php');
-// require_once('controller/LoginController.php');
-require_once('model/TodoModel.php');
-require_once('view/TodoView.php');
 require_once('controller/TodoController.php');
+require_once('controller/LoginController.php');
+require_once('controller/RegisterController.php');
+
+require_once('view/TodoView.php');
 require_once('view/LoginView.php');
-require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
+require_once('view/DateTimeView.php');
 require_once('view/RegisterView.php');
+require_once('model/TodoModel.php');
 require_once('model/Credentials.php');
+require_once('model/InputValidation.php');
+
 require_once('database/Database.php');
 require_once('model/InputValidation.php');
 
@@ -25,14 +28,22 @@ session_start();
 $db = new Database();
 $db->createTable();
 
-$todo = new TodoController($db);
-$todo->createAndSaveTodo();
+$iv = new InputValidation();
 
 $v = new LayoutView();
 $rv = new RegisterView();
+
+$todo = new TodoController($db);
+$todo->createAndSaveTodo();
+
 $lv = new LoginView($rv, $todo);
 
+$lc = new LoginController($db, $lv);
+$rc = new RegisterController($db, $rv, $lv, $iv);
 
-$controller = new MainController($v, $db, $lv, $rv, $todo);
+
+
+
+$controller = new MainController($v, $lv, $rv, $todo, $lc, $rc, $db);
 $controller->runLoginOrRegister(); 
 //renderHTML();

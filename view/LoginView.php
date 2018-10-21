@@ -3,16 +3,16 @@
 class LoginView
 {
 
-	private static $signupForm = "register";
-	private static $login = 'LoginView::Login';
-	private static $logout = 'LoginView::Logout';
-	private static $name = 'LoginView::UserName';
-	private static $password = 'LoginView::Password';
-	private static $keep = 'LoginView::KeepMeLoggedIn';
-	private static $messageId = 'LoginView::Message';
+	private static $signupForm 		= "register";
+	private static $login 			= 'LoginView::Login';
+	private static $logout 			= 'LoginView::Logout';
+	private static $name 			= 'LoginView::UserName';
+	private static $password 		= 'LoginView::Password';
+	private static $keep 			= 'LoginView::KeepMeLoggedIn';
+	private static $messageId 		= 'LoginView::Message';
 
-	private static $cookieName = "LoginView::CookieName";
-	private static $cookiePassword = "LoginView::CookiePassword";
+	private static $cookieName 		= "LoginView::CookieName";
+	private static $cookiePassword 	= "LoginView::CookiePassword";
 
 
 	private $message = '';
@@ -25,10 +25,10 @@ class LoginView
 	}
 
 
-    public function response(bool $isLoggedIn, string $renderedTodoHTML) {
+    public function response(bool $isLoggedIn) {
         if ($isLoggedIn) {
 			$response = $this->generateLogoutButtonHTML();
-			$response .= $renderedTodoHTML;
+			// $response .= $renderedTodoHTML;
         } else {
             $response = $this->generateLoginFormHTML();
         }

@@ -41,6 +41,7 @@ class MainController {
         } else if ($this->loginView->isNavigatingToRegistration()) {
 
             if($this->registerController->registerUser()) {
+                $this->loginView->setPrefilledUsername($this->registerView->getRequestUserNameFromRegistration());
                 return $this->layoutView->render(false, $this->loginView, $this->timeView, '');
             } else {
                 return $this->layoutView->render(false, $this->registerView, $this->timeView, '');

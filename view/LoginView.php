@@ -18,10 +18,11 @@ class LoginView
 	private $message = '';
 	private $database;
 
+	private $prefilledUsername = '';
+
 	public function __construct(RegisterView $registerView)
 	{
 		$this->registerView = $registerView;
-
 	}
 
 
@@ -63,18 +64,18 @@ class LoginView
 		return ' 
 		<a href="?' . self::$signupForm . '">Register a new user</a>
 		<form method="POST">
-		<fieldset>
-					<legend>Login - enter Username and password</legend>
-					<p id="' . self::$messageId . '">' . $this->message . '</p>
-					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->getRequestUserName() . '" />
-					<label for="' . self::$password . '">Password :</label>
-					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
-					<label for="' . self::$keep . '">Keep me logged in  :</label>
-					<input type="checkbox" id="' . self::$keep . '" name="' . self::$keep . '" />
-					<input type="submit" class="btn btn-info" name="' . self::$login . '" value="Login" />
-				</fieldset>
-            </form>
+			<fieldset>
+				<legend>Login - enter Username and password</legend>
+				<p id="' . self::$messageId . '">' . $this->message . '</p>
+				<label for="' . self::$name . '">Username :</label>
+				<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="' . $this->prefilledUsername . '" />
+				<label for="' . self::$password . '">Password :</label>
+				<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
+				<label for="' . self::$keep . '">Keep me logged in  :</label>
+				<input type="checkbox" id="' . self::$keep . '" name="' . self::$keep . '" />
+				<input type="submit" class="btn btn-info" name="' . self::$login . '" value="Login" />
+			</fieldset>
+        </form>
 		';
 	}
 
@@ -90,9 +91,9 @@ class LoginView
 	}
 
 
-	public function keepMeLoggedIn() : bool
+	public function setPrefilledUsername($preset)
 	{
-		return isset($_POST[self::$keep]);
+		$this->prefilledUsername = $preset;
 	}
 
 

@@ -18,7 +18,7 @@ class MainController {
     private $validation;
 
 
-    public function __construct(LayoutView $v, LoginView $lv, RegisterView $rv, TodoController $tc, LoginController $lc,RegisterController $rc, Database $db) {
+    public function __construct(LayoutView $v, LoginView &$lv, RegisterView $rv, TodoController $tc, LoginController $lc,RegisterController $rc, Database $db) {
         $this->layoutView           = $v;
         $this->loginView            = $lv;
         $this->registerView         = $rv;
@@ -47,7 +47,7 @@ class MainController {
                 return $this->layoutView->render(false, $this->registerView, $this->timeView, '');
             }
         } else if ($this->loginView->isTryingToLogin() && !$this->isAuthorised()) {
-            $this->loginView->setPrefilledUsername($this->registerView->getRequestUserNameFromRegistration());
+            $this->loginView->setPrefilledUsername($this->loginView->getRequestUserName());
             $this->loginController->login();
         }
             // Default view

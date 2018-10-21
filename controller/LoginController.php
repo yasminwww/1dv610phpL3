@@ -6,7 +6,7 @@ class LoginController {
     private $loginView;
     private $validation;
 
-    public function __construct(Database $db, LoginView $lv, InputValidation $iv) {
+    public function __construct(Database $db, LoginView &$lv, InputValidation $iv) {
 
         $this->database = $db;
         $this->loginView = $lv;

@@ -10,7 +10,7 @@ class RegisterController
     
 
 
-    public function __construct(Database $db, RegisterView $rv, LoginView $lv, InputValidation $iv)
+    public function __construct(Database $db, RegisterView $rv, LoginView &$lv, InputValidation $iv)
     {
         $this->database     = $db;
         $this->loginView    = $rv;

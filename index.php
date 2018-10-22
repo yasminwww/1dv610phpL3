@@ -17,6 +17,7 @@ require_once('model/InputValidation.php');
 
 require_once('database/Database.php');
 require_once('model/InputValidation.php');
+require_once('model/SessionModel.php');
 
 
 
@@ -37,8 +38,8 @@ $todo = new TodoController($db, $iv);
 $todo->createAndSaveTodo();
 
 $lv = new LoginView($rv, $todo);
-
-$lc = new LoginController($db, $lv, $iv);
+$sm = new SessionModel();
+$lc = new LoginController($db, $lv, $iv, $sm);
 $rc = new RegisterController($db, $rv, $lv, $iv);
 
 

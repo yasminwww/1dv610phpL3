@@ -2,15 +2,20 @@
 
 class LoginController {
 
+
+
     private $database;
     private $loginView;
     private $validation;
+    private $session;
 
-    public function __construct(Database $db, LoginView &$lv, InputValidation $iv) {
+    public function __construct(Database $db, LoginView $lv, InputValidation $iv, SessionModel $sm) {
 
         $this->database = $db;
         $this->loginView = $lv;
         $this->validation = $iv;
+        $this->session = $sm;
+
     }
 
 
@@ -26,12 +31,11 @@ class LoginController {
         if (!$this->database->isCorrectPasswordForUsername($username, $password)) {
             return false;
         } else {
-            $_SESSION['username'] = $credentials->getUsername();
-            $_SESSION['password'] = $credentials->getPassword();
+           $this->session->saveSessionUsername($credentials->getUsername());
+           $this->session->saveSessionPassword($credentials->getPassword());
             $this->loginView->setMessage($this->loginView->welcomeMessage());
             return true;
         }
-
        } 
     }
 }
